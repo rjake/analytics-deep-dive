@@ -1,0 +1,818 @@
+---
+pagetitle: "rocqi 2.0"
+title-slide-attributes:
+  data-background-image: /img/logo.png
+  data-background-size: "300px"
+author: "Jake Riley"
+date: "11/15/2022"
+editor: source
+from: markdown+emoji
+format: 
+  revealjs:
+    output-file: README.html
+    theme: [moon, custom.scss]
+    mouse-wheel: true
+    scrollable: true
+    width: 1200
+    height: 750
+    slide-number: c/t
+    controls: true
+    df-print: kable
+    navigation-mode: grid
+  gfm:
+    output-file: README.md
+knitr: 
+  opts_chunk: 
+    echo: true
+    # cache: true
+    fig.align: "center"
+    fig.width: 7
+    fig.height: 4
+    fig.retina: 3
+    out.width: "100%"
+---
+
+##
+
+<div>
+<p style="text-align:center; display: flex;justify-content: center;">
+    <img src='img/logo.png' height="450" alt='rocqi logo with 2.0 on top'/>
+</p>
+</div>
+
+
+<div style="position: absolute; bottom: 10px; left: 0px;">
+<h1><pre>`r rmarkdown::metadata$pagetitle`</pre></h1>
+<p style="line-height:1;">
+`r rmarkdown::metadata$author` 
+<br> `r rmarkdown::metadata$date`
+</p>
+</div>
+
+
+## What's new? -- SO SO MUCH!
+
+```{r avatar-code}
+#| echo: false
+avatar <- function(name) {
+  glue::glue(
+    "<img 
+      style='display:inline;height: 40px;vertical-align: middle;border-radius: 50%;' 
+      src= 'img/avatar-{name}.png'
+    />"
+  ) |> 
+    shiny::HTML()
+}
+```
+
+
+* New **SPC engines** AKA :sparkles:`plotly`:sparkles:
+* New data sets
+* [Improved documentation](https://github.research.chop.edu/pages/analytics/rocqi/index.html)
+* A small amount of breaking changes
+
+* We're also going to review some existing features
+
+<br>
+
+::: aside
+[slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/rocqi-2-0/README.html#1)
+    \| [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/README.md)
+
+[demo](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/rocqi-2-0/demo-script.html)
+    \| [demo-code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/demo-script.Rmd)
+:::
+
+## Let's look at the website
+
+* New search bar in top right
+
+* Subgroups for functions on reference page
+
+* Link to code on each page (ex. vignettes)
+
+* Lifecycle badges [see here](https://github.research.chop.edu/pages/analytics/rocqi/reference/hc_add_n.html)
+
+* Documented data sets
+
+* Improved 
+
+
+```{r setup}
+#| include: false
+library(gt)
+library(rocqi)
+library(tidyverse)
+library(lubridate)
+
+sepsis <- tail(rocqi::sepsis, 2)
+ggplot2::theme_set(rocqi::theme_chop())
+
+
+knit_print.data.frame <- function(x, n = 5, ...) {
+  head(x, n) |> 
+    knitr::kable() |> 
+    paste(collapse = "\n") |>
+    knitr::asis_output()
+}
+
+registerS3method(
+  genname = "knit_print",
+  class = "data.frame",
+  method = knit_print.data.frame,
+  envir = asNamespace("knitr")
+)
+```
+
+## Breaking changes
+* `run_sql()` and `run_sql_file()` now return lowercase column names by default (`lowercase_names = TRUE`)
+
+<br><br>
+* Now using the native pipe `|>` and requires R 4.1
+
+<br><br>
+* Data sets `clabsi` and `weekend_surgeries` were removed in favor of new data sets
+
+## Deprecations
+All functions that were flagged for deprecation have been removed
+
+
+removed | replaced with
+---     | ---
+hc_theme_chop( ) / hc_theme_ocqi( ) | `theme_chop()`
+hc_ocqi_opts( ) | `hc_chop_opts()`
+ocqi_colors( ) | `chop_colors()`
+scale_color_ocqi( ) / scale_fill_ocqi( ) | `scale_*_chop()`
+matomo_tracking( ), row_collapse( )` | (completely removed)
+
+
+## New SPC engines
+
+:clap: `r avatar("ezra")` Thank you Ezra!!!
+
+* ggplot + highchart + `plotly`
+
+```{r}
+#| eval: false
+ggplot_spc()    # aka spc()
+
+plotly_spc()    # aka spc(engine = "plotly")
+
+highchart_spc() # aka spc(engine = "highchart")
+```
+
+* Why? It will be easier to add new engines in the future
+
+
+## More info about each engine
+
+* how to change colors / aesthetics
+* links to each engine's API
+<img src='img/plotly-docs.png'>
+
+
+## Speaking of documentation
+
+We also updated our SPC documentation
+
+:clap: `r avatar("bolu")` Thank you **Bolu** 
+
+:clap: `r avatar("connie")` and thank you **Connie** 
+
+<img src='img/spc-docs.png'>
+
+
+## One theme to rule them all
+* you can use `theme_chop()` with any engine
+* You will need to use the right pipe
+
+```{r}
+#| eval: false
+     ggplot_spc() + theme_chop()
+
+     plotly_spc() |> theme_chop()
+
+highcharter_spc() |> theme_chop()
+```
+
+
+:::: {.columns}
+::: {.column width="50%"}
+```{r}
+#| echo: false
+p <- 
+  ed_fractures |> 
+  mutate(outside_imaging = recode_indicator(outside_imaging_ind)) |> 
+  ggplot(aes(time_to_ketamine_mins, fill = outside_imaging)) +
+  geom_histogram(alpha = 0.5, position = "identity", color = "white") +
+  labs(
+    fill = "Has Imaging",
+    y = NULL,
+    x = "Time to Ketamine"
+  )
+
+p + theme_gray()
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+p + theme_chop()
+```
+:::
+::::
+
+## Add labels easily
+
+This replaces `hc_add_n()`
+
+```{r}
+#| eval: false
+     ggplot_spc() + plot_add_label()
+
+     plotly_spc() |> plot_add_label()
+
+highcharter_spc() |> plot_add_label()
+```
+
+<br><br>
+
+:::: {.columns}
+::: {.column width="50%"}
+```{r}
+#| code-line-numbers: "10-14"
+p <- 
+  spc(
+    data = ed_fractures,
+    x = ed_arrival_date,
+    y = time_to_ketamine_mins,
+    period = "quarter",
+    chart = "run"
+  ) +
+  ylim(0, NA) + 
+  plot_add_label(
+    value = n,
+    at_y = y - 10,
+    size = 6
+  )
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+p
+```
+:::
+::::
+
+## When you want to peek under the hood
+
+* New functions `spc_calculate()` and `spc_plot()`
+* These usually go together
+```{r}
+#| eval: false
+#| code-line-numbers: "1,6-8"
+spc_calculate( # always returns a data frame
+  data = rocqi::sepsis,
+  x = hospital_admit_date,
+  y = abx_30_min_ind,
+  chart = "p"
+) |>
+  mutate(y = y + 0.5) |> # make some changes
+  spc_plot(engine = "plotly") # data must have 'x', 'y', and 'cl' 
+```
+
+
+## Some nice `run_sql()` updates
+
+:clap: `r avatar("ryan")` **Ryan** made it so `lowercase_names` is :sparkles: **always** :sparkles: `TRUE`
+
+<br>
+
+:clap: `r avatar("paul")` **Paul** made sure :sparkles: **all** :sparkles: data frames come back as tibbles
+
+<br>
+
+:clap: `r avatar("bolu")` **Bolu** fixed the `integer64` issue
+
+## One connection to rule them all
+
+The new default is <br> 
+`run_sql(..., conn = cdwprd())` instead of 
+<br> 
+`run_sql(..., dsn = "cdwprd")`
+
+### Why? 
+* one connection = one session = faster run times
+* opens up ability to use any ODBC connection, e.g. Clarity
+
+```{r}
+#| eval: false
+
+con <- cdwprd()
+
+x <- run_sql(..., conn = con)
+y <- run_sql(..., conn = con)
+z <- run_sql(..., conn = con)
+
+odbc::dbDisconnect(con)
+```
+
+* `run_sql(..., dsn = "cdwprd")` will work but you'll see a deprecation message
+
+
+## New data
+
+Each data frame has 2,000 rows and have 2 full fiscal years
+
+::: {.panel-tabset}
+### `ed_fractures`
+```{r}
+#| echo: false
+head(ed_fractures, 4) |> 
+  mutate(age_years = round(age_years, 2))
+```
+
+### `surgeries`
+```{r}
+#| echo: false
+head(surgeries, 3)
+```
+:::
+
+## Each data set has examples
+
+<img src='img/example-data-docs.png'>
+
+
+
+
+## Oldies but goodies
+
+Some features we've had that might not be common knowledge
+
+
+## Make sure your plot is worthy
+
+* Make sure you are using `spc()` appropriately with this function
+
+* Your x-axis groups should always have **20+** observations
+
+```{r}
+#| warning: true
+#| code-line-numbers: "3"
+head(surgeries, 600) |>
+  plotly_spc(x = surgery_date, y = opioid_rx_ind, chart = "p") |>
+  check_spc_assumptions()
+```
+
+
+
+## Presentation-ready data frames
+If you use our blocks naming conventions, `rocqi` will spruce up your tables
+
+Let's look at `sepsis`
+```{r library-start}
+sepsis
+```
+
+With this one function, we see a big difference
+```{r}
+#| code-line-numbers: "2"
+sepsis |>
+  format_data_frame()
+```
+
+::: {.notes}
+`format_data_frame()` is a powerhouse of a function:
+
+* drop keys - not meaningful
+* recode indicators to Y/N or whatever you want
+* date / time columns human-readable
+* nice column titles
+:::
+
+## `format_data_frame()`
+
+We can see how these arguments change the output
+
+```{r}
+#| code-line-numbers: "3-5"
+sepsis |> 
+  format_data_frame(
+    date_format = "%b %e",
+    keep_uppercase = uppercase_patterns(add = "abx"),
+    recode_indicators = indicator_values(if_1 = "within", if_0 = "exceeds")
+  )
+```
+<br>
+
+```{r}
+sepsis |>
+  format_data_frame()
+```
+
+## `nice_display_names()`
+
+Sometimes you just want to rename the columns
+
+```{r}
+#| code-line-numbers: "2"
+sepsis |> 
+  rename_all(nice_display_names)
+
+```
+
+## `nice_display_names()`
+
+Add or remove uppercase patterns
+```{r}
+#| code-line-numbers: "1,3,5"
+text <- c("hosp_admit_date", "pct_compliance", "surg_fy")
+
+nice_display_names(
+  text,
+  keep_uppercase = uppercase_patterns(add = "compliance", remove = "fy")
+)
+
+```
+
+Use regular expressions to add new patterns
+```{r}
+#| code-line-numbers: "1,3-7"
+nice_display_names(
+  text,
+  other_patterns = c(
+    "^hosp_" = "hospital",
+    "surg_" = "surgery_",
+    "_fy$" = "_fiscal_year"
+  )
+)
+
+```
+
+
+## `recode_indicators()`
+
+This function has 3 options: 
+* what to do if the value is `1`
+* what to do if the value is `0`
+* what to do if the value is `NA`
+
+```{r}
+#| code-line-numbers: "1,3-5"
+recode_indicator(
+  x = c(1, 0, NA),
+  if_1 = "exceeds",
+  if_0 = "within",
+  if_na = "(missing)"
+)
+```
+
+## `recode_indicators()`
+
+You can use it inside `mutate()` like this
+```{r}
+#| code-line-numbers: "4,6"
+df <- 
+  tibble(
+    imaging_ind = c(1, 0, NA),
+    imaging_text = recode_indicator(imaging_ind, "brought", "needs", "not applicable"),
+    pathway_ind = c(NA, 1, 0),
+    pathway_text = recode_indicator(pathway_ind, "used", "not used", "unknown")
+  )
+```
+
+<br>
+
+::: {.content-visible when-format="gfm"}
+```{r}
+#| echo: false
+df
+```
+:::
+
+::: {.content-visible when-format="revealjs"}
+```{r}
+#| echo: false
+highlight_na <- chop_colors("brown1")
+highlight_one <-  chop_colors("blue6")
+
+df |>
+  gt() |>
+  tab_options(
+    table.background.color = "white"
+  ) |> 
+  tab_style(
+    style = list(cell_borders(sides = "left")),
+    locations = list(
+      cells_body(columns = pathway_ind),
+      cells_column_labels(columns = pathway_ind)
+    )
+  ) |>
+  tab_style(
+    style = list(cell_text(weight = "bold", color = highlight_one)),
+    locations = cells_body(columns = starts_with("path"), rows = pathway_ind == 1)
+  ) |>
+  tab_style(
+    style = list(cell_text(weight = "bold", color = highlight_one)),
+    locations = cells_body(columns = starts_with("imag"), rows = imaging_ind == 1)
+  ) |>
+  tab_style(
+    style = list(cell_fill(color = highlight_na)),
+    locations = cells_body(columns = starts_with("path"), rows = is.na(pathway_ind))
+  ) |>
+  tab_style(
+    style = list(cell_fill(color = highlight_na)),
+    locations = cells_body(columns = starts_with("imag"), rows = is.na(imaging_ind))
+  ) |>
+  opt_horizontal_padding(scale = 2)
+
+```
+:::
+
+## Avoid big dips in the data
+
+If a month that isn't over, it can look like the data has had a huge drop
+
+```{r}
+ed_100 <- 
+  ed_fractures |> 
+  slice_min(ed_arrival_date, n = 300) |> 
+  mutate(month = floor_date(ed_arrival_date, "month"))
+
+ed_100 |> 
+  ggplot(aes(month)) +
+  geom_bar()
+```
+
+## `remove_incomplete_end_dates()`
+
+If we look at the date ranges, we see that the dates only go through `r format(max(ed_100$ed_arrival_date), "%B %e")`
+```{r}
+ed_100$ed_arrival_date |> range()
+```
+
+To remove incomplete months/weeks, etc, use this function
+```{r}
+#| code-line-numbers: "2-5"
+ed_100 |> 
+  remove_incomplete_end_dates(
+    date_column = month,
+    period = "month"
+  ) |> 
+  ggplot(aes(month)) +
+  geom_bar()
+
+```
+
+## Reporting on the fiscal calendar
+```{r}
+fiscal_month("2020-07-01")
+```
+
+<br>
+
+```{r}
+fiscal_month("2020-11-01", format = "%B")
+```
+
+<br>
+
+use `{q}` `{yy}` or `{yyyy}` to format the output
+```{r}
+#| eval: false
+fiscal_quarter("2020-07-01")                # FY'21 Q1 {default}
+fiscal_quarter("2020-07-01", "{q}")         # 1
+fiscal_quarter("2020-07-01", "Q{q}'{yy}")   # Q1'21
+fiscal_quarter("2020-07-01", "{yyyy} Q{q}") # 2021 Q1
+```
+
+## Year-over-year over easy
+The fiscal functions help with year-over-year charts
+```{r fig.width=10}
+#| code-line-numbers: "5-6"
+set.seed(2022)
+tibble(
+  surgery_date = as.Date("2021-07-01") %m+% months(0:23),
+  n = c(rnorm(12, 100, 15), rnorm(12, 110, 15)),
+  month = fiscal_month(surgery_date),
+  year = fiscal_year(surgery_date)
+) |>
+  ggplot(aes(month, n, group = year, color = factor(year))) +
+  geom_line() +
+  ylim(0, NA) +
+  theme(legend.position = "none")
+```
+
+
+## From one date, many
+Get the start of each day / week / month / quarter / year
+
+```{r}
+#| code-line-numbers: "2"
+#| eval: false
+sepsis |> 
+  add_date_columns(reference_date = hospital_admit_date)
+```
+
+<br>
+
+::: {.content-visible when-format="gfm"}
+```{r}
+#| echo: false
+sepsis |>
+  add_date_columns(hospital_admit_date)
+```
+:::
+
+::: {.content-visible when-format="revealjs"}
+```{r}
+#| echo: false
+sepsis |>
+  add_date_columns(hospital_admit_date) |>
+  gt() |>
+  tab_style(
+    style = cell_fill(color = "yellow", alpha = 0.2),
+    locations = list(
+      cells_body(starts_with("hospital_admit")),
+      cells_column_labels(starts_with("hospital_admit"))
+    )
+  ) |> 
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = list(
+      cells_column_labels(starts_with("hospital_admit"))
+    )
+  ) |>
+  tab_style(
+    style = list(cell_borders(sides = c("left", "right"))),
+    locations = list(
+      cells_body(starts_with("hospital_admit")),
+      cells_column_labels(starts_with("hospital_admit"))
+    )
+  )
+```
+:::
+
+## CHOP colors
+
+No longer need to use `c()`
+
+<br> 
+```{r}
+chop_colors("blue-4", "brown-2")
+```
+
+<br>
+
+... but you can
+```{r}
+chop_colors(c("blue-4", "brown-2"))
+```
+
+:clap: `r avatar("jen")` Thanks goes to **Jen Goodwin** 
+
+
+## CHOP colors
+::: {.panel-tabset}
+### `show_chop_colors()`
+<img src='img/chop-colors.png'>
+
+### `show_chop_colors(output = "table")`
+```{r}
+#| echo: false
+show_chop_colors(output = "table") |> 
+  knit_print.data.frame(n = Inf)
+```
+:::
+
+## Exploratory analysis
+
+```{r}
+#| eval: false
+data_summary(surgeries)
+```
+
+```{r}
+#| echo: false
+ds <- data_summary(surgeries)
+```
+
+::: {.panel-tabset}
+
+### Print out
+```{r}
+#| echo: false
+ds$tables
+```
+
+### Character
+```{r}
+#| echo: false
+ds$plots[[1]]
+```
+
+### Dates
+```{r}
+#| echo: false
+ds$plots[[2]]
+```
+
+### Factors
+```{r}
+#| echo: false
+ds$plots[[3]]
+```
+
+### Numeric
+```{r}
+#| echo: false
+ds$plots[[4]]
+```
+:::
+
+
+
+## Templates
+
+:::: {.columns}
+::: {.column width="40%"}
+* R Markdown Reports
+* Flexdashboard
+* Shiny Prerendered
+:::
+
+::: {.column width="60%"}
+<img src='img/rmd-template-selection.png'>
+:::
+::::
+
+## Templates
+:::: {.columns}
+::: {.column width="40%"}
+* Branding ready-to-go
+* Shiny debugging helper / reminder
+* Plot theme defaults
+:::
+
+::: {.column width="60%"}
+<img src='img/rmd-template-defaults.png'>
+:::
+::::
+
+
+## Templates
+:::: {.columns}
+::: {.column width="40%"}
+* Base script has standard layout
+* Looks good from the start :smile:
+:::
+
+::: {.column width="60%"}
+<img src='img/rmd-template-output.png'>
+:::
+::::
+
+## The Demo
+
+* [output](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/rocqi-2-0/demo-script.html)
+* [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/demo-script.Rmd)
+
+## Get involved
+
+* Add issues
+
+* Join our team
+  * Participate in monthly sprint planning (ask me to add you)
+  * Learn package development
+  * Help other analysts
+
+## Lastly
+
+* How do we ensure analysts are as proficient with `rocqi` as they are with `dplyr`?
+
+  * quick hits?
+  
+  * slack messages in `#r`?
+  
+  * ensure at least one person on product team is proficient in `rocqi` for code review
+  
+  * start-up messages?
+    * <img src='img/startup-msg.png'>
+
+```{r render-all-formats}
+#| include: false
+#| eval: false
+#| echo: false
+
+quarto::quarto_render("README.qmd", output_format = "all")
+```
+
+
+```{r ----EXIT-----}
+#| echo: false
+knitr::knit_exit()
+```

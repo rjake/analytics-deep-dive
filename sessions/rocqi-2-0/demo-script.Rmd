@@ -1,0 +1,126 @@
+---
+title: "`rocqi 2.0.0` deep dive demo"
+author: "`r Sys.getenv('USERNAME')`"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+    html_document:
+        anchor_sections: TRUE
+        df_print: kable
+        toc: true
+        toc_float: true
+        toc_depth: 3
+        css: https://github.research.chop.edu/pages/CQI/chop-bootstrap/bootstrap-3/bootstrap.min.css
+---
+
+---
+See the full code [here](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/demo-script.Rmd)
+
+```{r knitr-opts, include=FALSE}
+# Prevent code chunks from printing text
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r workspace}
+library(gt)
+library(rocqi)
+library(tidyverse)
+
+options(
+  ggplot2.discrete.fill = chop_colors(), 
+  ggplot2.discrete.color = chop_colors()
+)
+
+theme_set(theme_chop()) # theme_chop ----
+```
+
+### Presentation-ready data
+
+```{r}
+df <- 
+  ed_fractures |> 
+  mutate(
+    has_outside_imaging = 
+      recode_indicator(  # recode_indicator ----
+        outside_imaging_ind, 
+        if_1 = "Has", 
+        if_0 = "Missing"
+      ), 
+    bone = nice_display_names(bone) # nice_display_names ----
+  )
+
+df |> 
+  head() |> 
+  select(icd10_code, bone) |> 
+  format_data_frame(                                  # format_data_frame ----
+    # keep_uppercase = uppercase_patterns(c("icd10")) # uppercase_patterns ----
+  ) |>  
+  gt()
+
+df |> 
+  head() |> 
+  rename_all(nice_display_names) |> # nice_display_names ----
+  gt()
+
+df |> 
+  ggplot(aes(time_to_ketamine_mins, fill = has_outside_imaging)) +
+  geom_histogram(alpha = 0.5, position = "identity", color = "white")
+
+```
+
+### Fiscal reporting
+
+```{r}
+surgeries |> 
+  slice_min(surgery_date, n = 1000) |> # first 1K
+  mutate(
+    fy = fiscal_year(surgery_date),        # fiscal_year ----
+    quarter = fiscal_quarter(surgery_date) # fiscal_quarter ----
+  ) |> 
+  # remove_incomplete_end_dates(           # remove_incomplete_end_dates ----
+  #   date_column = surgery_date,
+  #   period = "month"
+  # ) |>
+  ggplot(aes(quarter, fill = factor(fy))) +
+  geom_bar()
+```
+
+compare these two:
+
+```{r}
+
+surgeries |> 
+  mutate(month = lubridate::month(surgery_date, label = TRUE)) |> # lubridate
+  ggplot(aes(month)) +
+  geom_bar()
+
+
+surgeries |> 
+  mutate(month = fiscal_month(surgery_date)) |>                  # fiscal_month ----
+  ggplot(aes(month)) +
+  geom_bar()
+
+```
+
+### Dates at different granularities
+
+```{r}
+surgeries |> 
+  head() |> 
+  select(log_id, surgery_date) |> 
+  add_date_columns(surgery_date) # add_date_columns ----
+```
+
+### Colors
+
+```{r}
+show_chop_colors()
+
+show_chop_colors(output = "table")
+```
+
+### Exploratory analysis
+
+```{r}
+data_summary(surgeries)
+```
+

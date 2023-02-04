@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>reprex</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jake Riley - 2/4/2022" />
+    <script src="README_files/header-attrs-2.11/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# reprex
+### Jake Riley - 2/4/2022
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.title-slide {
+  vertical-align: bottom !important; 
+  text-align: left !important;
+}
+&lt;/style&gt;
+
+
+
+## Agenda
+
+* [slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/reprex/README.html#1) | [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex/README.md)
+
+* Examples in R
+
+* Examples in SQL
+
+* Recap
+
+---
+
+## Getting help in R
+
+**Pointers**
+
+* use built-in datasets
+
+* `dput()` + `datapasta` to recreate data
+
+* `set.seed()` for random-generating functions
+
+* always include libraries, the reprex package can help
+
+&lt;br&gt;
+
+The following examples will use these libraries
+
+
+```r
+library(rocqi)
+library(tidyverse)
+```
+
+---
+
+## Use built-in dates
+
+Use `Sys.time()` and `Sys.Date()` 
+
+```r
+tibble(
+  date_requested = Sys.time() + (1:6 * 60),
+  surgery_date = Sys.Date() + (1:6 * 7),
+  date_dist = surgery_date - as.Date(date_requested)
+)
+```
+
+```
+## # A tibble: 6 x 3
+##   date_requested      surgery_date date_dist
+##   &lt;dttm&gt;              &lt;date&gt;       &lt;drtn&gt;   
+## 1 2022-03-09 18:08:44 2022-03-16    7 days  
+## 2 2022-03-09 18:09:44 2022-03-23   14 days  
+## 3 2022-03-09 18:10:44 2022-03-30   21 days  
+## 4 2022-03-09 18:11:44 2022-04-06   28 days  
+## 5 2022-03-09 18:12:44 2022-04-13   35 days  
+## 6 2022-03-09 18:13:44 2022-04-20   42 days
+```
+
+I like starting with a `tibble()` instead of `data.frame()` since you can use columns made at the time
+
+---
+
+## Use built-in `letters`
+
+```r
+tibble(
+  surgeon = rep(LETTERS[1:3], each = 2),
+  location = rep(letters[1:3], times = 2),
+  op_note = sentences[1:6] # comes from stringr
+)
+```
+
+```
+## # A tibble: 6 x 3
+##   surgeon location op_note                                    
+##   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;                                      
+## 1 A       a        The birch canoe slid on the smooth planks. 
+## 2 A       b        Glue the sheet to the dark blue background.
+## 3 B       c        It's easy to tell the depth of a well.     
+## 4 B       a        These days a chicken leg is a rare dish.   
+## 5 C       b        Rice is often served in round bowls.       
+## 6 C       c        The juice of lemons makes fine punch.
+```
+
+
+---
+
+## Use `sentences` for regex
+
+This comes from `stringr`
+
+```r
+tibble(
+  note_text = sentences[1:5],
+  last_word = str_extract(note_text, "\\w+\\.$") # don't want "."
+)
+```
+
+```
+## # A tibble: 5 x 2
+##   note_text                                   last_word  
+##   &lt;chr&gt;                                       &lt;chr&gt;      
+## 1 The birch canoe slid on the smooth planks.  planks.    
+## 2 Glue the sheet to the dark blue background. background.
+## 3 It's easy to tell the depth of a well.      well.      
+## 4 These days a chicken leg is a rare dish.    dish.      
+## 5 Rice is often served in round bowls.        bowls.
+```
+
+---
+
+## Mock up missing values from scratch
+
+
+```r
+tibble(
+  x = c(1, NA, 2),
+  y = c(NA, "a", NA)
+)
+```
+
+```
+## # A tibble: 3 x 2
+##       x y    
+##   &lt;dbl&gt; &lt;chr&gt;
+## 1     1 &lt;NA&gt; 
+## 2    NA a    
+## 3     2 &lt;NA&gt;
+```
+
+---
+
+## Mock up missing values using existing data
+
+
+```r
+head(mtcars) |&gt;
+  select(1:5) |&gt;
+  mutate_all(# make NA if rows are in 2 or 4
+    ~ifelse(row_number() %in% c(2, 4), NA, .x)
+  )
+```
+
+```
+##                    mpg cyl disp  hp drat
+## Mazda RX4         21.0   6  160 110 3.90
+## Mazda RX4 Wag       NA  NA   NA  NA   NA
+## Datsun 710        22.8   4  108  93 3.85
+## Hornet 4 Drive      NA  NA   NA  NA   NA
+## Hornet Sportabout 18.7   8  360 175 3.15
+## Valiant           18.1   6  225 105 2.76
+```
+
+---
+
+## Use `?fn` to get sharable examples
+
+If you need help with an spc chart, look in the help page
+
+Using `?spc` gives this example:
+
+
+```r
+spc(
+  data = sepsis,
+  x = hospital_admit_date,
+  y = abx_30_min_ind,
+  chart = "p",
+  part_dates = "2022-06-01"
+)
+```
+
+---
+
+## Use built-in distribution functions
+
+.pull-left[
+`rnorm()` gives a normal distribution
+
+```r
+hist(
+  rnorm(2000, mean = 0.5, sd = 0.1)
+)
+```
+
+![](C:/Users/rileyj3/github/dna-deep-dives/sessions/reprex/README_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+`rbeta()` gives a skewed distribution
+
+```r
+hist(
+  rbeta(2000, shape1 = 2, shape2 = 10)
+)
+```
+
+![](C:/Users/rileyj3/github/dna-deep-dives/sessions/reprex/README_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Use built-in distribution functions
+
+You can use this to mock up your data
+
+```r
+tibble(
+  # normal age distribution
+  age = rnorm(n = 6, mean = 10, sd = 3),
+  # skewed LOS distribution up to 2 weeks
+  los_days = rbeta(n = 6, shape1 = 2, shape2 = 10) * 14
+            # ---------------- 0 to 1 ------------ x 14 days
+)
+```
+
+```
+## # A tibble: 6 x 2
+##     age los_days
+##   &lt;dbl&gt;    &lt;dbl&gt;
+## 1  9.58    2.29 
+## 2  9.87    1.79 
+## 3 10.3     3.78 
+## 4 11.8     3.64 
+## 5  8.58    3.09 
+## 6 12.8     0.397
+```
+
+---
+
+## Use `set.seed()` for reproducible randomness
+
+Without a "seed", random number functions like `rnorm()` will give different results each time
+
+```r
+rnorm(5)
+```
+
+```
+## [1]  1.01206123  0.06262154  1.01600791 -0.07171228  0.62085825
+```
+
+```r
+rnorm(5)
+```
+
+```
+## [1] -0.3182924  0.8073847 -0.1491243  0.3840996 -1.2993786
+```
+
+---
+
+## Use `set.seed()` for reproducible randomness
+
+Using `set.seed()` will make sure that the random number generator starts at the same point each time. Note: it needs to be right before random fn or in the right order
+
+```r
+set.seed(2022) 
+rnorm(5)
+```
+
+```
+## [1]  0.9001420 -1.1733458 -0.8974854 -1.4445014 -0.3310136
+```
+
+```r
+set.seed(2022) 
+rnorm(5)
+```
+
+```
+## [1]  0.9001420 -1.1733458 -0.8974854 -1.4445014 -0.3310136
+```
+
+---
+
+## The `reprex` package
+
+Copy to code to your clipboard then use `reprex::reprex_slack()` in console or highlight code in source pane and use `reprex` add-in
+
+```r
+mpg |&gt;
+  mutate(x = Sys.Date)
+```
+
+```r
+mpg |&gt;
+  mutate(x = Sys.Date)
+#&gt; Error in mutate(mpg, x = Sys.Date): could not find function "mutate"
+```
+
+---
+
+## `dput()`
+
+Use `dput()` to "export" the structure of your data.
+
+```r
+your_data &lt;- head(ToothGrowth, 3)
+dput(your_data)
+```
+
+```
+## structure(list(len = c(4.2, 11.5, 7.3), supp = structure(c(2L, 
+## 2L, 2L), .Label = c("OJ", "VC"), class = "factor"), dose = c(0.5, 
+## 0.5, 0.5)), row.names = c(NA, 3L), class = "data.frame")
+```
+
+---
+
+## `structure()`
+
+Assign the results of `dput()` to a new object
+
+
+```r
+my_data &lt;-
+  structure(
+    list(
+      len = c(4.2, 11.5, 7.3),
+      supp = structure(c(2L, 2L, 2L), .Label = c("OJ", "VC"), class = "factor"),
+      dose = c(0.5, 0.5, 0.5)
+    ),
+    row.names = c(NA, 3L),
+    class = "data.frame"
+  )
+
+identical(your_data, my_data)
+```
+
+```
+## [1] TRUE
+```
+
+---
+
+## `clipr` and `datapasta`
+
+Copy data to your clipboard
+
+
+```r
+your_data |&gt; clipr::write_clip() 
+```
+
+Use add-ins: `datapasta` &gt; `paste as tribble`. Also works with data on your clipboard from excel
+
+
+```r
+tibble::tribble(
+  ~len, ~supp, ~dose,
+  4.2, "VC", 0.5,
+  11.5, "VC", 0.5,
+  7.3, "VC", 0.5
+)
+```
+
+```
+## # A tibble: 3 x 3
+##     len supp   dose
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1   4.2 VC      0.5
+## 2  11.5 VC      0.5
+## 3   7.3 VC      0.5
+```
+
+---
+
+## Keep things minimal
+
+Just select the colums you need and a minimal # of rows
+
+```r
+#   row  col
+mpg[1:3, 1:2]
+```
+
+```
+## # A tibble: 3 x 2
+##   manufacturer model
+##   &lt;chr&gt;        &lt;chr&gt;
+## 1 audi         a4   
+## 2 audi         a4   
+## 3 audi         a4
+```
+
+A row of 1 is often enough
+
+```r
+head(mpg, 1) |&gt; #dput()
+  mutate_if(is.character, toupper)
+```
+
+```
+## # A tibble: 1 x 11
+##   manufacturer model displ  year   cyl trans    drv     cty   hwy fl    class  
+##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  
+## 1 AUDI         A4      1.8  1999     4 AUTO(L5) F        18    29 P     COMPACT
+```
+
+
+---
+
+## Built-in data 
+* see all data sets with
+    * `data()`
+    * `data(package = "rocqi")`
+
+* base R
+    * `iris`
+    * `ToothGrowth`
+    * `quakes` - mapping
+
+* [`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) - all 3 good for plotting, mix of categorical &amp; numeric
+    * `mpg`
+    * `diamonds`
+    * `msleep`
+    * `map_data` - map polygons ([see vignette](https://ggplot2.tidyverse.org/reference/map_data.html))
+
+---
+
+## Built-in data 
+
+* [`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
+    * `us_rent_income` - pivoting
+    * `population` - longitudinal
+
+* [`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
+    * `storms` - longitudinal
+    * `starwars` - lists, missingness, comma separated values
+
+---
+
+## Built-in data 
+
+  * `sf`
+      * `st_read(system.file("shape/nc.shp", package="sf"))` - comes with install
+
+
+  * [`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
+      * `ed_fractures`
+      * `surgeries`
+
+---
+
+## Getting help in SQL
+
+**Pointers**
+
+* use `select` without a `from` statement
+
+* mock up CTEs with `select` + `union`
+
+* use reserved words like `current_date` to mock up data types
+
+* write a small sample to `qmr_dev` if all else fails
+
+
+
+---
+
+## can use select alone, no 'from' statement
+
+```sql
+select 123
+```
+
+---
+
+## Use built-in date values
+
+`current_date` and `current_timestamp` are built in
+
+```sql
+select
+    current_date - 2 as encounter_date,
+    current_timestamp as surgery_time, -- also now()
+    surgery_time::date - encounter_date as n_days,
+    datetime(timezone(now(),  'UTC', 'America/New_York')) as time_utc    
+```
+
+---
+
+## Mock-up note_text
+
+
+```sql
+select
+    'I want the second word' as note_text,
+    regexp_extract(note_text, '\w+', 1, 2) as second_word
+```
+
+---
+
+## Set-up a small data set with a `union` CTE
+
+```sql
+
+with 
+    clinic_list as (
+              select '555-123-4567' as phone_number
+        union select '555.123.4567'
+        union select '(555)123-4567'
+        union select '1-555-123-4567' 
+        union select '(555)123-4567 ext. 9' 
+    )
+select 
+    phone_number,
+    regexp_replace(
+        phone_number,
+        '^1?[^\d]*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*',
+        '\1-\2-\3'
+    ) as clean_number
+from clinic_list
+```
+
+---
+
+## Put a subset of the data in `QMR_DEV`
+
+Put subset in qmr_dev for someone to help you if it does require a few CTEs to get to your output add a small helper `select` at the end of the CTE
+
+.pull-left[
+
+```sql
+*--create table abc as 
+with
+    x as (
+       select 
+       from
+*    ) --select * from x;
+
+    , y as (
+       select 
+       from
+    )
+
+select *
+from 
+   ...
+
+```
+]
+
+.pull-right[
+Remember to drop anything you don't need long-term
+
+```sql
+drop table abc if exists;
+```
+]
+
+---
+
+## Takeaways
+**Always**
+* give all code required to reproduce the problem
+* remove extraneous code
+* include expected output if possible, use pictures, arrows, etc.
+
+**For R**
+* use built-in datasets
+* `dput()` + `datapasta` to recreate data
+* `set.seed()` for random-generating functions
+* always include libraries, the reprex package can help
+
+**For SQL**
+* use `select` without a `from` statement
+* mock up CTEs with `select` + `union`
+* use reserved words like `current_date` to mock up data types
+* write a small sample to `qmr_dev` if all else fails
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

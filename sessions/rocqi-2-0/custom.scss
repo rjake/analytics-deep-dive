@@ -1,0 +1,121 @@
+/*-- scss:defaults --*/
+$presentation-font-size-root: 20px;
+
+
+/*-- scss:rules --*/
+:root {
+    --r-main-font-size: 30px;
+}
+
+.slide {
+    overflow-y: auto !important;
+}
+
+.reveal .slide-number-a, .slide-number-delimiter, .slide-number-b {
+  font-size: 24pt;
+  color: #ffffff;
+}
+
+.reveal h1 {
+  text-transform: none;
+}
+
+.reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  font-family: Lato, sans-serif;
+  text-transform: none;
+  padding-bottom: 20px;
+}
+
+.reveal .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  padding-bottom: 0px;
+}
+
+// title slide
+//   h1.title {
+//
+//   }
+//
+//   p.author {
+//     position: absolute;
+//     bottom: 10px;
+//     right: 10px;
+//   }
+//
+//   p.date {
+//     position: absolute;
+//     bottom: 10px;
+//     right: 100px;
+//   }
+
+// links
+.reveal a {
+  color: #729cb9;
+}
+
+// tabs
+.panel-tabset [role="tab"][aria-selected="true"] {
+  border: 3px solid #045;
+}
+
+.panel-tabset [role="tablist"] {
+  border-bottom: 1px solid #045
+}
+
+// bullets
+ul li { 
+  padding: 5px 0px; 
+}
+
+// output
+.cell-output-display {
+  padding-top: 10px;
+}
+
+// chunks
+.reveal code {
+  background-color: transparent;
+  padding: 0px 6px 4px 6px;
+}
+
+.reveal div.sourceCode {
+  border: 1px solid transparent;
+  width: 1000px;
+  margin: 50px;
+}
+
+.reveal div.sourceCode pre code.has-line-highlights > span:not(.highlight-line) {
+  opacity: 0.25;
+}
+
+
+.reveal pre.sourceCode code {
+  background-color: #003542;
+}
+
+// tables
+table.gt_table {
+ background-color: white;
+}
+
+table {
+  background-color: white;
+}
+
+th {
+  color: $body-bg;
+}
+
+// circular images
+.circular_image {
+  display:inline;
+  height: 40px;
+  vertical-align: middle;
+  border-radius: 50%;
+  /* commented for demo
+  overflow: hidden;
+  background-color: blue;
+  float: left;
+  margin-left: 125px;
+  margin-top: 20px;
+  */
+}

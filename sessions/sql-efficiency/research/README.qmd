@@ -1,0 +1,426 @@
+---
+title: "SQL Efficiency"
+author: "Jake Riley 9/9/2022"
+editor: source
+format: 
+  gfm:
+    output-file: README.md
+  revealjs:
+    output-file: README.html
+    theme: [dark, custom.scss]
+    mouse-wheel: true
+    scrollable: true
+
+    # transition: fade
+    # background-transition: zoom
+knitr: 
+  opts_chunk: 
+#     fig.align: "center"
+#     fig.width: 9
+#     fig.height: 3.5
+#     fig.retina: 3
+#     out.width: "100%"
+#     echo: true
+    eval: false
+#     message: false
+#     warning: false
+---
+
+```{r}
+# to run all formats
+#| include: false
+#| eval: false
+quarto::quarto_render("README.qmd", output_format = "gfm")
+quarto::quarto_render("README.qmd", output_format = "revealjs", output_file = "advanced-slides.html")
+quarto::quarto_render(
+  input = "README.qmd", 
+  output_format = "revealjs", 
+  output_file = "basic-slides.html", 
+  pandoc_args = "--lua-filter=hideadvanced.lua"
+)
+```
+
+
+## Open questions
+
+* do we use indexing?
+    * does stage 1 indexable only work if table is indexed or is indexable something that happens at runtime?\
+        ex: col between 5 and 10
+* would [this](https://dba.stackexchange.com/questions/111584/how-to-increase-etl-performance-in-informatica-for-netezza-as-a-source-and-sql-s) help re: informatica?
+* can we use [zone maps](https://medium.com/@rleishman/netezza-zone-maps-theyre-the-same-as-indexes-right-fb3249f01cea)
+* explain [Record size exceeds internal limit of 65535 bytes](https://www.ibm.com/support/pages/record-size-exceeds-internal-limit-65535-bytes)
+
+## Agenda
+
+* [slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/sql-efficiency/README.html#1) \| [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/sql-efficiency/README.md)
+* 
+* 
+
+## why are we here
+
+* morning runtime
+* tech debt
+
+## high cost (advanced) {.advanced}
+
+* cost
+* plans
+* snippets
+
+
+## End
+```{r}
+#| eval: true
+knitr::knit_exit()
+```
+
+## order
+
+* `FROM` & `JOIN` determine & filter rows
+* `WHERE` more filters on the rows
+* `GROUP BY` combines those rows into groups
+* `HAVING` filters groups
+* `SELECT` returns and modifies columns
+* `DISTINCT` removes duplicates
+* `ORDER BY` arranges the remaining rows/groups
+* `LIMIT` filters on the remaining rows/groups
+
+## www.techagilist.com
+
+* [source](https://www.techagilist.com/mainframe/db2/db2-predicates-performance-tuning-db2-queries/)
+* stage 1 - no table scan
+    * indexable - **first**
+        * column + operator such as `=`, `>`, `<`, `>=`, `<=`
+        * `between`, `in` and `like 'abc%'` (no leading wildcard)
+    * non-indexable - **second**
+        * column + `!=`, `not between` and `not like`
+* stage 2 - **third** - has full table scan
+    * functions on column `substr(x, 1, 1) = 'B'`
+    * if field is varchar(8) and you ask it to evaluate a string of length 10
+* order within stages
+    * equality & `in (one_value)`
+    * ranges and `x is not null`
+    * all others
+* compound predicates will take the higher stage
+    * `x = 'y' or x <> 'z'` -> stage 1, non-indexable
+    * `x = 'y' or substr(x, 1, 1) = 'z'` -> stage 2
+* `x between y and z` is more efficient than `x <=y and x >= z`
+
+## www.informit.com
+
+* [source](https://www.informit.com/articles/article.aspx?p=27015&seqNum=5)
+* These will invalidate indexing
+    * Comparing columns in the same table
+    * Choosing columns with low-selectivity indexes (maybe not applicable?)
+    * Doing math on a column before comparing it to a constant
+    * Applying a function to column data before comparing it to a constant
+    * Finding ranges with BETWEEN
+    * Matching with LIKE
+    * Comparing to NULL
+    * Negating with NOT
+    * Converting values
+    * Using OR
+    * Finding sets of values with IN
+    * Using multicolumn indexes
+
+## nasis.sc.egov.usda.gov
+
+* [source](https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-Tips)
+* `GROUP BY` or `ORDER BY` are not used unnecessarily
+* It is fast or faster to `SELECT` by actual column name(s) than to use an asterisk. The larger the table, the more likely you will save time.
+* Perform functions instead of comparisons on the data objects referenced in the `WHERE` clause. (`x > 0` rather than `x != 0`)
+* Make the table with the least number of rows the driving table. Do this by making it first in the `FROM` clause.
+* The `OVER` clause with an aggregate function is similar to, but more efficient than, a subquery.
+
+## www.ibm.com
+
+* [source](https://www.ibm.com/docs/en/db2-for-zos/12?topic=queries-coding-sql-statements-avoid-unnecessary-processing)
+
+* stage 1 (before returned) vs stage 2 (after returned)
+
+* https://www.ibm.com/docs/en/db2-for-zos/12?topic=selection-stage-1-stage-2-predicates
+
+    * predicates associated with columns or constants of the DECFLOAT data type are never treated as stage 1
+
+* https://www.ibm.com/docs/en/db2-for-zos/12?topic=selection-examples-predicate-properties
+
+* https://www.ibm.com/docs/en/db2-for-zos/12?topic=factors-default-filter-simple-predicates
+
+* https://www.ibm.com/docs/en/db2-for-zos/12?topic=efficiently-adding-extra-predicates-improve-access-paths
+
+* https://www.ibm.com/docs/en/db2-for-zos/12?topic=manipulation-removal-pre-evaluated-predicates
+
+    * Db2 does not remove OR 0=1 or OR 0<>0 predicates. Predicates of these forms can be used to prevent index access.
+
+* https://www.ibm.com/docs/en/db2-for-zos/12?topic=queries-making-predicates-eligible-expression-based-indexes
+
+    * subquery for `upper()`?
+
+## www.ibm.com
+
+* [list of stage 1 vs stage 2](https://www.ibm.com/docs/en/db2-for-zos/12?topic=efficiently-summary-predicate-processing)
+
+    * see also [explanation](https://www.ibm.com/docs/en/db2-for-zos/11?topic=efficiently-summary-predicate-processing#db2z_summarypredicateprocessing__bkn9pred1187154)
+
+## Predicates (imported)
+```{r predicate-table}
+#| eval: true
+#| echo: false
+
+# setwd(dirname(.rs.api.getSourceEditorContext()$path))
+library(tidyverse)
+library(gt)
+
+# https://www.bmc.com/blogs/db2-predicates/
+predicates <- read_csv("predicate-stages.csv")
+
+predicates |>
+  mutate_all(tolower) |>
+  filter(coalesce(note, "") != "exclude") |>
+  select(predicate, logic, stage) |>
+  mutate(
+    stage = 
+      ifelse(stage == "indexible", stage, paste("stage", stage))
+  ) |>
+  group_by(logic, stage) |>
+  summarise(predicate = paste(predicate, collapse = "<br>")) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = stage,
+    values_from = predicate,
+    values_fill = ""
+  ) |>
+  gt::gt() |>
+  tab_options(
+    table.font.size = px(11),
+    table.font.names = "Courier"
+  ) |>
+  fmt_markdown(columns = everything())
+  
+  
+```
+
+## Predicates (examples) {.smaller}
+
++--------------+---------------------------------------+--------------------------+-------------------------------+
+| Type         | Fastest (indexable)                   | Slower (stage 1)         | Slowest (stage 2)             |
++==============+=======================================+==========================+===============================+
+| `in`         | col in ()                             |                          |                               |
++--------------+---------------------------------------+--------------------------+-------------------------------+
+| `between`    | col between 5 and 10\                 | col not between 5 and 10 | col between col_2 and col_3\  |
+|              | 5 between col_1 and col_2\            |                          | 5 not between col_1 and col_2 |
++--------------+---------------------------------------+--------------------------+-------------------------------+
+| `null`       |                                       | is null\                 |                               |
+|              |                                       | is not null              |                               |
++--------------+---------------------------------------+--------------------------+-------------------------------+
+| `like`       | like 'abc%'\                          | like '%abc%'\            |                               |
+|              | like lower('abc%')                    | not like 'abc%'          |                               |
++--------------+---------------------------------------+--------------------------+-------------------------------+
+| equality     | col = 123\                            | col <> 123               | col <> col_2                  |
+|              | col = noncol expr\                    |                          |                               |
+|              | col = lower('abc')\                   |                          |                               |
+|              | col > 123                             |                          |                               |
++--------------+---------------------------------------+--------------------------+-------------------------------+
+
+
+## www.ibm.com
+
+* [source](https://www.ibm.com/docs/en/db2-for-zos/12?topic=processing-using-non-column-expressions-efficiently)
+* Where possible, use a non-column expression (put the column on one side of the operator and all other values on the other)
+
+```{sql}
+where (x * 2) < 20
+
+-- preferred
+where x < 20 / 2
+
+```
+
+## www.sisense.com
+
+* [source](https://www.sisense.com/blog/8-ways-fine-tune-sql-queries-production-databases/)
+* use `where` instead of `having` - doesn't require a full index search
+* wildcards at the end only preferred `'abc%'` instead of `'%abc%'`
+
+## arctype.com
+
+* [source](https://arctype.com/blog/optimize-sql-query/)
+* the larger the number of rows, the higher the probability of slow performance.
+* The run time of an SQL query increases every time a table join is implemented. This is because joins increase the number of rows---and in many cases, columns---in the output. To rectify this situation, the size of the table should be reduced (as previously suggested) before joining.
+* `limit` + a `group by` happens after and won't affect runtime
+
+## blog.jooq.org
+
+* [source](https://blog.jooq.org/avoid-using-count-in-sql-when-you-could-use-exists/)
+* use `exists()` instead of `count()`
+
+```{sql}
+-- slower, cost = 123
+select 
+  count(*) as n_film
+from movies
+where last_name = 'WAHLBERG'
+
+-- faster, cost = 3.4
+select 
+  exists(
+    select * from actor where last_name = 'WAHLBERG' 
+  ) as n_film
+from movies
+where last_name = 'WAHLBERG'
+```
+
+* rationale
+
+```{js}
+// EXISTS
+if (!collection.isEmpty())
+    doSomething();
+ 
+// COUNT(*)
+if (collection.size() == 0)
+    doSomething();
+```
+
+## www.metabase.com
+
+* [source](https://www.metabase.com/learn/sql-questions/sql-best-practices#sql-best-practices-for-from)
+* adding table alias to column is faster, prevents column name search
+* filter `WHERE` before `HAVING`
+* `||` is a function -> stage 2 bad: `hero || sidekick = 'BatmanRobin'` good: `hero = 'Batman' AND sidekick = 'Robin'`
+* use `EXISTS` vs `IN`
+* order `GROUP BY` columns by more unique values first (descending cardinality)
+* `UNION ALL` vs `UNION`
+* Use `CREATE INDEX` ?
+
+## sqlmaestros.com
+
+* [source](https://sqlmaestros.com/sargability-cast-convert-more/)
+* sargable predicates (conditions) can be filtered before results are returned
+    * **`S`**earch **`ARG`**ument **`ABLE`**
+* sargable
+    * `where x between '2021/01/01' and '2021/12/31'`
+* non-sargable
+    * `where year(x) = 2021`
+
+## towardsdatascience.com
+
+* [source](https://towardsdatascience.com/14-ways-to-optimize-bigquery-sql-for-ferrari-speed-at-honda-cost-632ec705979)
+* `exists` > `count` > `count distinct`
+* avoid self joins with window functions like `lead()` & `lag()`
+* join on integers > strings
+* anti-join best as `except distinct` > `not exists` > `left join` > `not in`
+* trim data early and often
+* `where` order should be most filtered first (optimizer might handle this)
+* use `CREATE TABLE xyz PARTITIONED BY abc CLUSTER BY`
+* only use `ORDER BY` at the final query (if at all) (optimizer might handle this)
+* use functions at the end rather than in CTEs (ex. `regexp_replace()`)
+
+## www.sqlshack.com
+
+* [source](https://www.sqlshack.com/query-optimization-techniques-in-sql-server-tips-and-tricks/)
+* replace `join on x or y` with `union all`
+* over-indexing write is slow
+* under-indexing read is slow
+* fewer tables = less cost -> blocks > base
+* "left-deep tree" (linear) > "bushy tree"
+    * bushy: `A join B, A join C, B join D, C join E`
+        * With 12 tables in a bushy query, the math would work out to:
+        * (2n-2)! / (n-1)! = (2*12-1)! / (12-1)! = 28,158,588,057,600 possible execution plans.
+    
+    * deep-tree: `A join B, B join C, C join D, D join E`
+        * If the query had been more linear in nature, then we would have:
+        * n! = 12! = 479,001,600 possible execution plans.
+* joins that are used to return a single constant can be moved to a parameter or variable
+* query hints (SQL server only?)
+
+
+
+## www.sqlshack.com
+* [source](https://www.sqlshack.com/query-optimization-techniques-in-sql-server-the-basics/)
+
+  * `where x like 'abc%'` > `where left(x, 3) = 'abc'`
+
+* don't rely on implcit conversion as it converts everything then filters use `where x = '123'` > `where x = 123`
+
+* [source](https://www.sqlshack.com/query-optimization-in-sql-server-for-beginners/)
+
+* trace flags? (not sure what these are)
+
+## www.idug.org
+
+* [source](https://www.idug.org/browse/blogs/blogviewer?blogkey=bd88bb79-dc28-4b73-be0b-bea9858513f3)
+* https://www.youtube.com/watch?v=FIVDmEIjBZA
+
+## hosteddocs.ittoolbox.com
+
+* [source](http://hosteddocs.ittoolbox.com/Questnolg22106sqltips.pdf)
+
+## checking
+
+* you can check with
+* this only holds the last 5K queries in the CDW (can go by quickly)
+
+```{sql}
+select
+    qh_tsubmit,
+    qh_tstart,
+    qh_tend,
+    extract(
+      epoch from qh_tend - qh_tstart
+      ) as runtime_s,           -- > 180s
+    qh_estcost,                 -- > 1,000,000
+    qh_snippets,                -- > 20
+    length(qh_sql) as n_char,   -- > 6000
+    qh_user,
+    qh_database,
+    qh_sql
+from 
+    _v_qryhist 
+where
+    qh_user = current_user
+order by 
+    1 desc
+```
+
+## Suggestions for users
+
+* do transforms in staging table to make `where` statements faster
+
+```{sql}
+-- faster (stage 1)
+where hour_start < 7
+
+-- slower (stage 2)
+where hour(query_start_date) < 7
+```
+
+* 
+
+## Suggestions for blocks
+
+* change all mixed case to lower case to avoid `where lower(procedure_name) in ()`
+* add fiscal year to applicable blocks
+
+
+## Resources
+
+You can learn more about SQL optimization here:
+
+* [Mayank's Tutorial](https://github.research.chop.edu/sardanam/sql-best-practices/blob/master/sql-performance/sql_best_practices.md)
+
+* 
+
+
+```{html}
+<style>
+.slide {
+    height: 750px;
+    overflow-y: auto !important;
+}
+
+:root {
+    --r-main-font-size: 30px;
+}
+</style>
+```
