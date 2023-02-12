@@ -55,7 +55,7 @@ options(
 
 ## Agenda
 
-* [slides](https://rjake.github.io/analytics-deep-dive//sessions/reprex/README.html#1) | [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex/README.md)
+* [slides](https://rjake.github.io/analytics-deep-dive/sessions/reprex/README.html#1) | [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex/README.md)
 
 * Examples in R
 

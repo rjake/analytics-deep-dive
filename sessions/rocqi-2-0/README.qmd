@@ -76,10 +76,10 @@ avatar <- function(name) {
 <br>
 
 ::: aside
-[slides](https://rjake.github.io/analytics-deep-dive//sessions/rocqi-2-0/README.html#1)
+[slides](https://rjake.github.io/analytics-deep-dive/sessions/rocqi-2-0/README.html#1)
     \| [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/README.md)
 
-[demo](https://rjake.github.io/analytics-deep-dive//sessions/rocqi-2-0/demo-script.html)
+[demo](https://rjake.github.io/analytics-deep-dive/sessions/rocqi-2-0/demo-script.html)
     \| [demo-code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/demo-script.Rmd)
 :::
 
@@ -778,7 +778,7 @@ ds$plots[[4]]
 
 ## The Demo
 
-* [output](https://rjake.github.io/analytics-deep-dive//sessions/rocqi-2-0/demo-script.html)
+* [output](https://rjake.github.io/analytics-deep-dive/sessions/rocqi-2-0/demo-script.html)
 * [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/rocqi-2-0/demo-script.Rmd)
 
 ## Get involved
