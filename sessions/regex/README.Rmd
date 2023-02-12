@@ -55,7 +55,7 @@ knitr::opts_chunk$set(
 
 ## Agenda
 
-* [slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/regex/README.html#1) | [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/regex/README.md)
+* [slides](https://rjake.github.io/analytics-deep-dive//sessions/regex/README.html#1) | [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/regex/README.md)
 
 * Searching for text in **R** & **SQL**
 

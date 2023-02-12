@@ -2,11 +2,11 @@ regex (.\*)
 ================
 Jake Riley - 2/25/2022
 
-<!-- Didn't work in YAML: <br> <a href="https://www.github.com/pages/rjake/analytics-deep-dive/sessions/regex/README.html#1"style="color:#f8f8f8">slides</a> | <a href="https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/regex/README.md"style="color:#f8f8f8">code</a></p -->
+<!-- Didn't work in YAML: <br> <a href="https://rjake.github.io/analytics-deep-dive//sessions/regex/README.html#1"style="color:#f8f8f8">slides</a> | <a href="https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/regex/README.md"style="color:#f8f8f8">code</a></p -->
 
 ## Agenda
 
--   [slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/regex/README.html#1)
+-   [slides](https://rjake.github.io/analytics-deep-dive//sessions/regex/README.html#1)
     \|
     [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/regex/README.md)
 
