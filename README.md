@@ -2,7 +2,7 @@
 
 ### Sessions
 
-Use the [website](https://www.github.com/pages/rjake/analytics-deep-dive/) option ☝️ to view slides 👇
+Use the [website](https://rjake.github.io/analytics-deep-dive/) option ☝️ to view slides 👇
 
  Code |Slides | Topic
 :---: |:---:  |:---
