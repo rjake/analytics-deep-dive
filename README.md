@@ -1,4 +1,4 @@
-[repo](https://www.github.com/rjake/analytics-deep-dive/) \| [website](https://www.github.com/pages/rjake/analytics-deep-dive/)
+[repo](https://www.github.com/rjake/analytics-deep-dive/) \| [website](https://rjake.github.io/analytics-deep-dive/)
 
 ### Sessions
 
