@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="README_files/libs/clipboard/clipboard.min.js"></script>
-<script src="README_files/libs/quarto-html/tabby.min.js"></script>
-<script src="README_files/libs/quarto-html/popper.min.js"></script>
-<script src="README_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="README_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="README_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="README_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="reprex-r_files/libs/clipboard/clipboard.min.js"></script>
+<script src="reprex-r_files/libs/quarto-html/tabby.min.js"></script>
+<script src="reprex-r_files/libs/quarto-html/popper.min.js"></script>
+<script src="reprex-r_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="reprex-r_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="reprex-r_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="reprex-r_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.2.335">
 
   <meta name="author" content="Jake Riley 3/2/2023">
@@ -14,8 +14,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="README_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="README_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="reprex-r_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="reprex-r_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -93,11 +93,11 @@
     code span.vs { color: #abe338; } /* VerbatimString */
     code span.wa { color: #dcc6e0; } /* Warning */
   </style>
-  <link rel="stylesheet" href="README_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link href="README_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="README_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="README_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="README_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="reprex-r_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link href="reprex-r_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="reprex-r_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="reprex-r_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="reprex-r_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -403,10 +403,11 @@ Jake Riley 3/2/2023
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
 <ul>
-<li><p><a href="https://www.github.com/pages/rjake/analytics-deep-dive/sessions/reprex-r/index.html#1">slides</a> | <a href="https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md">code</a></p></li>
+<li><p><a href="https://rjake.github.io/analytics-deep-dive/sessions/reprex-r">slides</a> | <a href="https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md">code</a></p></li>
 <li><p>Examples in R</p></li>
-<li><p>Examples in SQL</p></li>
+<li><p>Live demo</p></li>
 <li><p>Recap</p></li>
+<li><p>If time / interest… examples in SQL</p></li>
 </ul>
 </section>
 <section id="getting-help-in-r" class="slide level2">
@@ -455,7 +456,7 @@ Jake Riley 3/2/2023
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="README_files/figure-revealjs/unnamed-chunk-2-1.png" width="960"></p>
+<p><img data-src="reprex-r_files/figure-revealjs/unnamed-chunk-2-1.png" width="960"></p>
 </div>
 </div>
 </div><div class="column">
@@ -483,7 +484,7 @@ Jake Riley 3/2/2023
 <span id="cb3-20"><a href="#cb3-20"></a>  <span class="fu">geom_col</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span>  <span class="co"># &lt;----</span></span>
 <span id="cb3-21"><a href="#cb3-21"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="README_files/figure-revealjs/unnamed-chunk-3-1.png" width="960"></p>
+<p><img data-src="reprex-r_files/figure-revealjs/unnamed-chunk-3-1.png" width="960"></p>
 </div>
 </div>
 </div>
@@ -502,12 +503,12 @@ Jake Riley 3/2/2023
 <pre><code># A tibble: 6 × 3
   date_requested      surgery_date date_dist
   &lt;dttm&gt;              &lt;date&gt;       &lt;drtn&gt;   
-1 2023-03-02 10:58:03 2023-03-09    7 days  
-2 2023-03-02 10:59:03 2023-03-16   14 days  
-3 2023-03-02 11:00:03 2023-03-23   21 days  
-4 2023-03-02 11:01:03 2023-03-30   28 days  
-5 2023-03-02 11:02:03 2023-04-06   35 days  
-6 2023-03-02 11:03:03 2023-04-13   42 days  </code></pre>
+1 2023-03-02 12:06:39 2023-03-09    7 days  
+2 2023-03-02 12:07:39 2023-03-16   14 days  
+3 2023-03-02 12:08:39 2023-03-23   21 days  
+4 2023-03-02 12:09:39 2023-03-30   28 days  
+5 2023-03-02 12:10:39 2023-04-06   35 days  
+6 2023-03-02 12:11:39 2023-04-13   42 days  </code></pre>
 </div>
 </div>
 <p>I like starting with a <code>tibble()</code> instead of <code>data.frame()</code> since you can use columns made at the time</p>
@@ -611,7 +612,7 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">rnorm</span>(<span class="dv">2000</span>, <span class="at">mean =</span> <span class="fl">0.5</span>, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
 <span id="cb15-3"><a href="#cb15-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="README_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
+<p><img data-src="reprex-r_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
 </div>
 </div>
 <p>]</p>
@@ -621,7 +622,7 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">rbeta</span>(<span class="dv">2000</span>, <span class="at">shape1 =</span> <span class="dv">2</span>, <span class="at">shape2 =</span> <span class="dv">10</span>)</span>
 <span id="cb16-3"><a href="#cb16-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="README_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
+<p><img data-src="reprex-r_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
 </div>
 </div>
 <p>]</p>
@@ -641,12 +642,12 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <pre><code># A tibble: 6 × 2
     age los_days
   &lt;dbl&gt;    &lt;dbl&gt;
-1  9.62    1.04 
-2  8.68    6.26 
-3  9.18    4.23 
-4  8.13    2.87 
-5  4.74    0.654
-6 13.3     2.10 </code></pre>
+1 13.0      4.56
+2 13.5      1.11
+3  6.68     1.87
+4 11.4      3.11
+5 14.6      5.28
+6 15.3      5.16</code></pre>
 </div>
 </div>
 </section>
@@ -656,11 +657,11 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  1.10141666 -1.33601344  0.09550013  1.27347037  0.24027040</code></pre>
+<pre><code>[1] -1.4988007  0.4970669 -0.9862658  0.7657424 -0.6097626</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -2.3936915 -0.7763161 -0.1766381  0.2315230  0.3087881</code></pre>
+<pre><code>[1] 0.2989946 0.3645981 0.9064805 1.0520722 0.9023164</code></pre>
 </div>
 </div>
 </section>
@@ -831,6 +832,29 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <section id="this-app" class="slide level2">
 <h2>This app</h2>
 <p>https://rjake.shinyapps.io/Find-Good-Data/</p>
+</section></section>
+<section>
+<section id="live-demo" class="title-slide slide level1 center">
+<h1>Live Demo</h1>
+<p>https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-reprex.R</p>
+</section>
+<section id="takeaways" class="slide level2">
+<h2>Takeaways</h2>
+<p><strong>Always</strong></p>
+<ul>
+<li>give all code required to reproduce the problem</li>
+<li>remove extraneous code</li>
+<li>include expected output if possible, use pictures, arrows, etc.</li>
+<li>use built-in datasets</li>
+<li><code>dput()</code> + <code>datapasta</code> to recreate data</li>
+<li><code>set.seed()</code> for random-generating functions</li>
+<li>always include libraries, the reprex package can help</li>
+</ul>
+</section></section>
+<section>
+<section id="sql" class="title-slide slide level1 center">
+<h1>SQL</h1>
+
 </section>
 <section id="getting-help-in-sql" class="slide level2">
 <h2>Getting help in SQL</h2>
@@ -916,12 +940,20 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">drop</span> <span class="kw">table</span> abc <span class="cf">if</span> <span class="kw">exists</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>]</p>
+</section></section>
+<section>
+<section id="live-demo-1" class="title-slide slide level1 center">
+<h1>Live Demo</h1>
+<p>https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql</p>
 </section>
-<section id="takeaways" class="slide level2">
-<h2>Takeaways</h2>
-<p><strong>Always</strong> * give all code required to reproduce the problem * remove extraneous code * include expected output if possible, use pictures, arrows, etc.</p>
-<p><strong>For R</strong> * use built-in datasets * <code>dput()</code> + <code>datapasta</code> to recreate data * <code>set.seed()</code> for random-generating functions * always include libraries, the reprex package can help</p>
-<p><strong>For SQL</strong> * use <code>select</code> without a <code>from</code> statement * mock up CTEs with <code>select</code> + <code>union</code> * use reserved words like <code>current_date</code> to mock up data types * write a small sample to <code>qmr_dev</code> if all else fails</p>
+<section id="sql-takeaways" class="slide level2">
+<h2>SQL Takeaways</h2>
+<ul>
+<li>use <code>select</code> without a <code>from</code> statement</li>
+<li>mock up CTEs with <code>select</code> + <code>union</code></li>
+<li>use reserved words like <code>current_date</code> to mock up data types</li>
+<li>write a small sample to <code>qmr_dev</code> if all else fails</li>
+</ul>
 <div class="footer footer-default">
 
 </div>
@@ -930,19 +962,19 @@ Valiant           18.1   6  225 105 2.76</code></pre>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="README_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="reprex-r_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="README_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="README_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="README_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="README_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="README_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="README_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="README_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="README_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="README_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="reprex-r_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>

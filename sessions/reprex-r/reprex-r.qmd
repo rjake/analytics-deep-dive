@@ -30,7 +30,7 @@ options(
 
 ## Agenda
 
-* [slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/reprex-r/index.html#1) \| [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md)
+* [slides](https://rjake.github.io/analytics-deep-dive/sessions/reprex-r) \| [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md)
 
 * Examples in R
 
@@ -420,20 +420,22 @@ head(mpg, 1) |> #dput()
 https://rjake.shinyapps.io/Find-Good-Data/
 
 
-## R Takeaways
+# Live Demo
+
+https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-reprex.R
+
+## Takeaways
+
 **Always**
+
 * give all code required to reproduce the problem
 * remove extraneous code
 * include expected output if possible, use pictures, arrows, etc.
-
-**For R**
 * use built-in datasets
 * `dput()` + `datapasta` to recreate data
 * `set.seed()` for random-generating functions
 * always include libraries, the reprex package can help
 
-
-# Live Demo
 
 # SQL
 
@@ -542,9 +544,24 @@ drop table abc if exists;
 ```
 ]
 
+# Live Demo
+
+https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql
+
 
 ## SQL Takeaways
+
 * use `select` without a `from` statement
 * mock up CTEs with `select` + `union`
 * use reserved words like `current_date` to mock up data types
 * write a small sample to `qmr_dev` if all else fails
+
+```{r quarto}
+#| include: false
+#| eval: false
+rstudioapi::getSourceEditorContext() |>  
+  quarto::quarto_render(output_format = "all")
+
+# CLI > quarto render reprex-r.qmd --to gfm,revealjs
+```
+
