@@ -8,36 +8,29 @@ Jake Riley 3/2/2023
   \|
   [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md)
 
-- Examples in R
+- What is a reproducible example
 
-- Live demo
+- How to mock up data
+
+- Built in data sets
 
 - Recap
 
 - If time / interest… examples in SQL
 
-## Getting help in R
-
-**Pointers**
-
-- use built-in datasets
-
-- `dput()` + `datapasta` to recreate data
-
-- `set.seed()` for random-generating functions
-
-- always include libraries, the reprex package can help
-
 <br>
 
-The following examples will use these libraries
+We will use these libraries
 
 ``` r
-library(rocqi)
 library(tidyverse)
+library(rocqi) # internal to CHOP
 ```
 
-# Why
+# Reproducible Examples
+
+`reprex` is shorthand for a `rep`roducible `ex`ample <br> It should be
+as little code as required for other people to run your code
 
 ## Let’s look at an example
 
@@ -104,6 +97,23 @@ score_percent |>
 
 </div>
 
+## Getting help in R
+
+**Pointers**
+
+- use built-in datasets
+
+- `dput()` + `datapasta` to recreate data
+
+- `set.seed()` for random-generating functions
+
+- always include libraries, the `reprex` package can help
+
+# Built-in Data
+
+There are data sets and constants in R that can help you mock up your
+code
+
 ## Use built-in dates
 
 Use `Sys.time()` and `Sys.Date()`
@@ -119,17 +129,19 @@ tibble(
     # A tibble: 6 × 3
       date_requested      surgery_date date_dist
       <dttm>              <date>       <drtn>   
-    1 2023-03-02 12:08:03 2023-03-09    7 days  
-    2 2023-03-02 12:09:03 2023-03-16   14 days  
-    3 2023-03-02 12:10:03 2023-03-23   21 days  
-    4 2023-03-02 12:11:03 2023-03-30   28 days  
-    5 2023-03-02 12:12:03 2023-04-06   35 days  
-    6 2023-03-02 12:13:03 2023-04-13   42 days  
+    1 2023-03-02 13:33:41 2023-03-09    7 days  
+    2 2023-03-02 13:34:41 2023-03-16   14 days  
+    3 2023-03-02 13:35:41 2023-03-23   21 days  
+    4 2023-03-02 13:36:41 2023-03-30   28 days  
+    5 2023-03-02 13:37:41 2023-04-06   35 days  
+    6 2023-03-02 13:38:41 2023-04-13   42 days  
 
 I like starting with a `tibble()` instead of `data.frame()` since you
 can use columns made at the time
 
 ## Use built-in `letters`
+
+Note `rep(..., each)` vs `rep(..., times)`
 
 ``` r
 tibble(
@@ -219,21 +231,29 @@ spc(
 )
 ```
 
+# Random numbers
+
 ## Use built-in distribution functions
 
-.pull-left\[ `rnorm()` gives a normal distribution
+<div class="columns">
+
+<div class="column">
+
+`rnorm()` gives a normal distribution
 
 ``` r
 hist(
-  rnorm(2000, mean = 0.5, sd = 0.1)
+  rnorm(2000, mean = 12, sd = 3)
 )
 ```
 
 ![](reprex-r_files/figure-commonmark/unnamed-chunk-9-1.png)
 
-\]
+</div>
 
-.pull-right\[ `rbeta()` gives a skewed distribution
+<div class="column">
+
+`rbeta()` gives a skewed distribution
 
 ``` r
 hist(
@@ -243,7 +263,9 @@ hist(
 
 ![](reprex-r_files/figure-commonmark/unnamed-chunk-10-1.png)
 
-\]
+</div>
+
+</div>
 
 ## Use built-in distribution functions
 
@@ -252,7 +274,7 @@ You can use this to mock up your data
 ``` r
 tibble(
   # normal age distribution
-  age = rnorm(n = 6, mean = 10, sd = 3),
+  age = rnorm(n = 6, mean = 12, sd = 3),
   # skewed LOS distribution up to 2 weeks
   los_days = rbeta(n = 6, shape1 = 2, shape2 = 10) * 14
             # ------------- 0 to 1 ------------ x 14 days
@@ -262,80 +284,127 @@ tibble(
     # A tibble: 6 × 2
         age los_days
       <dbl>    <dbl>
-    1 15.5     1.81 
-    2 16.7     4.79 
-    3  9.72    3.67 
-    4  7.94    0.911
-    5 10.8     1.01 
-    6  9.66    1.10 
+    1  7.01    3.97 
+    2 15.4     2.84 
+    3 11.5     0.193
+    4 14.8     1.38 
+    5 13.6     0.449
+    6 14.7     7.46 
 
 ## Use `set.seed()` for reproducible randomness
 
-Without a “seed”, random number functions like `rnorm()` will give
-different results each time
+Without a “seed”, random number functions will give different results
+each time
 
 ``` r
 rnorm(5)
 ```
 
-    [1]  0.48891297  0.07097056 -0.31348708 -2.24323376 -0.16382952
+    [1] -0.4608143 -0.8709348  0.2800714  0.1378880 -1.0150381
 
 ``` r
 rnorm(5)
 ```
 
-    [1]  2.182826987 -0.877750986 -1.074965315  0.007048683  1.467737886
+    [1] -0.1068143 -0.1350810 -0.5646634 -0.4983243 -0.4666068
 
-## Use `set.seed()` for reproducible randomness
-
-Using `set.seed()` will make sure that the random number generator
-starts at the same point each time. Note: it needs to be right before
-random fn or in the right order
+<br><br> Using `set.seed()` will make sure that the random number
+generator starts at the same point each time. Note: it needs to be right
+before random fn or in the right order
 
 ``` r
-set.seed(2022) 
+set.seed(2023) 
 rnorm(5)
 ```
 
-    [1]  0.9001420 -1.1733458 -0.8974854 -1.4445014 -0.3310136
+    [1] -0.08378436 -0.98294375 -1.87506732 -0.18614466 -0.63348570
 
 ``` r
-set.seed(2022) 
+set.seed(2023) 
 rnorm(5)
 ```
 
-    [1]  0.9001420 -1.1733458 -0.8974854 -1.4445014 -0.3310136
+    [1] -0.08378436 -0.98294375 -1.87506732 -0.18614466 -0.63348570
 
-## The `reprex` package
+# The `reprex` package
 
-Copy to code to your clipboard then use `reprex::reprex_slack()` in
-console or highlight code in source pane and use `reprex` add-in
+Developed by Jenny Bryan and widely used
+
+## It’s easy to use
+
+Copy code to your clipboard then use `reprex::reprex_selection()` in
+console <br> or highlight code in source pane and use `reprex` add-in
 
 ``` r
-mpg |>
+mtcars |>
   mutate(x = Sys.Date)
 ```
 
+    ```r
+    mpg |>
+      mutate(x = Sys.Date)
+    #> Error in mutate(mpg, x = Sys.Date): could not find function "mutate"
+    ```
+
+Try again…
+
 ``` r
-mpg |>
+library(tidyverse)
+
+mtcars |>
   mutate(x = Sys.Date)
-#> Error in mutate(mpg, x = Sys.Date): could not find function "mutate"
 ```
 
-## `dput()`
+    ```r
+    library(tidyverse)
+
+    mpg |>
+      mutate(x = Sys.Date)
+    #> Error in `mutate()`:
+    #> ℹ In argument: `x = Sys.Date`.
+    #> Caused by error:
+    #> ! `x` must be a vector, not a function.
+    ```
+
+One more time…
+
+``` r
+library(tidyverse)
+
+mtcars |>
+  mutate(x = Sys.Date())
+```
+
+:tada: :tada: :tada:
+
+    ``` r
+    library(tidyverse)
+
+    mtcars |>
+      mutate(x = Sys.Date())
+    #>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb          x
+    #> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4 2023-03-02
+    #> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4 2023-03-02 
+    #> Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1 2023-03-02
+    #> Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1 2023-03-02
+    #> Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2 2023-03-02
+    ```
+
+# Actually send your data
+
+## `dput()` & `structure()`
 
 Use `dput()` to “export” the structure of your data.
 
 ``` r
-your_data <- head(ToothGrowth, 3)
+your_data <- head(ToothGrowth, 3) |> as_tibble()
 dput(your_data)
 ```
 
     structure(list(len = c(4.2, 11.5, 7.3), supp = structure(c(2L, 
     2L, 2L), levels = c("OJ", "VC"), class = "factor"), dose = c(0.5, 
-    0.5, 0.5)), row.names = c(NA, 3L), class = "data.frame")
-
-## `structure()`
+    0.5, 0.5)), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, 
+    -3L))
 
 Assign the results of `dput()` to a new object
 
@@ -348,7 +417,7 @@ my_data <-
       dose = c(0.5, 0.5, 0.5)
     ),
     row.names = c(NA, 3L),
-    class = "data.frame"
+    class = c("tbl_df", "tbl", "data.frame")
   )
 
 identical(your_data, my_data)
@@ -356,53 +425,48 @@ identical(your_data, my_data)
 
     [1] TRUE
 
-## `clipr` and `datapasta`
+## `datapasta`
 
-Copy data to your clipboard
-
-``` r
-your_data |> clipr::write_clip() 
-```
-
-Use add-ins: `datapasta` \> `paste as tribble`. Also works with data on
-your clipboard from excel
+Make a reproducible example with this or the add-in: `datapasta` \>
+`fiddle_selection`
 
 ``` r
-tibble::tribble(
-  ~len, ~supp, ~dose,
-  4.2, "VC", 0.5,
-  11.5, "VC", 0.5,
-  7.3, "VC", 0.5
-)
+your_data |> datapasta::dpasta()
 ```
 
-    # A tibble: 3 × 3
-        len supp   dose
-      <dbl> <chr> <dbl>
-    1   4.2 VC      0.5
-    2  11.5 VC      0.5
-    3   7.3 VC      0.5
+``` r
+your_data <-
+  tibble::tribble(
+    ~len, ~supp, ~dose,
+     4.2,  "VC",   0.5,
+    11.5,  "VC",   0.5,
+     7.3,  "VC",   0.5
+  )
+```
+
+For data copied from excel, copy to your clipboard and use the add-in:
+`datapasta` \> `paste as tribble`.
 
 ## Keep things minimal
 
 Just select the colums you need and a minimal \# of rows
 
 ``` r
-#   row  col
-mpg[1:3, 1:2]
+starwars |> 
+  select(1:3) |> 
+  head(2)
 ```
 
-    # A tibble: 3 × 2
-      manufacturer model
-      <chr>        <chr>
-    1 audi         a4   
-    2 audi         a4   
-    3 audi         a4   
+    # A tibble: 2 × 3
+      name           height  mass
+      <chr>           <int> <dbl>
+    1 Luke Skywalker    172    77
+    2 C-3PO             167    75
 
 A row of 1 is often enough
 
 ``` r
-head(mpg, 1) |> #dput()
+head(mpg, 1) |> # use dput() here
   mutate_if(is.character, toupper)
 ```
 
@@ -411,48 +475,122 @@ head(mpg, 1) |> #dput()
       <chr>        <chr> <dbl> <int> <int> <chr>    <chr> <int> <int> <chr> <chr>  
     1 AUDI         A4      1.8  1999     4 AUTO(L5) F        18    29 P     COMPACT
 
-## Built-in data
+# Built-in data
 
-- see all data sets with
-  - `data()`
-  - `data(package = "rocqi")`
-- base R
-  - `iris`
-  - `ToothGrowth`
-  - `quakes` - mapping
-- [`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) -
-  all 3 good for plotting, mix of categorical & numeric
-  - `mpg`
-  - `diamonds`
-  - `msleep`
-  - `map_data` - map polygons ([see
-    vignette](https://ggplot2.tidyverse.org/reference/map_data.html))
+see all data sets with
 
-## Built-in data
+``` r
+data()
+data(package = "dplyr")
+```
 
-- [`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
-  - `us_rent_income` - pivoting
-  - `population` - longitudinal
-- [`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
-  - `storms` - longitudinal
-  - `starwars` - lists, missingness, comma separated values
+## Some good ones to know
 
-## Built-in data
+base R
 
-- `sf`
-  - `st_read(system.file("shape/nc.shp", package="sf"))` - comes with
-    install
-- [`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
-  - `ed_fractures`
-  - `surgeries`
+``` r
+iris
+mtcars
+airquality
+Orange
+ToothGrowth
+quakes # mapping
+```
 
-## This app
+## How is this helpful?
 
-https://rjake.shinyapps.io/Find-Good-Data/
+<div class="columns">
 
-# Live Demo
+<div class="column">
 
-https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-reprex.R
+Rename columns for plots
+
+``` r
+df <- 
+  ggplot2::economics |>
+  head(3) |> 
+  select(
+    recorded_date = date,
+    lab_value = pce
+  )
+```
+
+</div>
+
+<div class="column">
+
+    # A tibble: 3 × 2
+      recorded_date lab_value
+      <date>            <dbl>
+    1 1967-07-01         507.
+    2 1967-08-01         510.
+    3 1967-09-01         516.
+
+</div>
+
+</div>
+
+Mix and match pieces
+
+``` r
+tibble(
+  hospital_admit_date = economics$date[1:3],
+  losandays = economics$uempmed[1:3],
+  name = starwars$name[1:3],
+  note_text = stringr::sentences[1:3]
+)
+```
+
+    # A tibble: 3 × 4
+      hospital_admit_date losandays name           note_text                        
+      <date>                  <dbl> <chr>          <chr>                            
+    1 1967-07-01                4.5 Luke Skywalker The birch canoe slid on the smoo…
+    2 1967-08-01                4.7 C-3PO          Glue the sheet to the dark blue …
+    3 1967-09-01                4.6 R2-D2          It's easy to tell the depth of a…
+
+## Others
+
+[`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) -
+all 3 good for plotting, mix of categorical & numeric
+
+``` r
+mpg
+diamonds
+msleep
+map_data("state") #see vignette: https://ggplot2.tidyverse.org/reference/map_data.html
+```
+
+[`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
+
+``` r
+us_rent_income # pivoting
+population # longitudinal
+```
+
+[`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
+
+``` r
+storms # longitudinal
+starwars # lists, missingness, comma separated values
+```
+
+[`sf`](https://r-spatial.github.io/sf/articles/sf3.html)
+
+``` r
+system.file("shape/nc.shp", package="sf") |> # comes with install
+  st_read()
+```
+
+[`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
+
+``` r
+ed_fractures
+surgeries
+```
+
+and this app
+
+[https://rjake.shinyapps.io/Find-Good-Data](https://rjake.shinyapps.io/Find-Good-Data/)
 
 ## Takeaways
 
@@ -468,19 +606,7 @@ https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-repre
 
 # SQL
 
-## Getting help in SQL
-
-**Pointers**
-
-- use `select` without a `from` statement
-
-- mock up CTEs with `select` + `union`
-
-- use reserved words like `current_date` to mock up data types
-
-- write a small sample to `qmr_dev` if all else fails
-
-## can use select alone, no ‘from’ statement
+## Use `select` without a `from` statement
 
 ``` sql
 select 123
@@ -498,7 +624,7 @@ select
     datetime(timezone(now(),  'UTC', 'America/New_York')) as time_utc    
 ```
 
-## Mock-up note_text
+## Mock-up note text
 
 ``` sql
 select
@@ -534,39 +660,45 @@ Put subset in qmr_dev for someone to help you if it does require a few
 CTEs to get to your output add a small helper `select` at the end of the
 CTE
 
-.pull-left\[
+<div class="columns">
+
+<div class="column">
 
 ``` sql
-*--create table abc as 
+--create table abc as 
 with
-    x as (
-       select 
-       from
-*    ) --select * from x;
+x as (
+   select 
+   from
+) --select * from x;
 
-    , y as (
-       select 
-       from
-    )
+, y as (
+   select 
+   from
+)
 
 select *
 from 
    ...
 ```
 
-\]
+</div>
 
-.pull-right\[ Remember to drop anything you don’t need long-term
+<div class="column">
+
+Remember to drop anything you don’t need long-term
 
 ``` sql
 drop table abc if exists;
 ```
 
-\]
+</div>
+
+</div>
 
 # Live Demo
 
-https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql
+<https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql>
 
 ## SQL Takeaways
 

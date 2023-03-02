@@ -61,11 +61,20 @@ code span.co {
   font-style: italic;
 }
 
-
-/* Mermaid */
-.arrowheadPath {
-  fill:red !important;
+// tables
+table.gt_table {
+ background-color: white;
 }
+
+table {
+  background-color: white;
+}
+
+th {
+  color: $body-bg;
+}
+
+
 
 /*
 .smaller{

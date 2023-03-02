@@ -404,32 +404,23 @@ Jake Riley 3/2/2023
 <h2>Agenda</h2>
 <ul>
 <li><p><a href="https://rjake.github.io/analytics-deep-dive/sessions/reprex-r">slides</a> | <a href="https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md">code</a></p></li>
-<li><p>Examples in R</p></li>
-<li><p>Live demo</p></li>
+<li><p>What is a reproducible example</p></li>
+<li><p>How to mock up data</p></li>
+<li><p>Built in data sets</p></li>
 <li><p>Recap</p></li>
 <li><p>If time / interest… examples in SQL</p></li>
 </ul>
-</section>
-<section id="getting-help-in-r" class="slide level2">
-<h2>Getting help in R</h2>
-<p><strong>Pointers</strong></p>
-<ul>
-<li><p>use built-in datasets</p></li>
-<li><p><code>dput()</code> + <code>datapasta</code> to recreate data</p></li>
-<li><p><code>set.seed()</code> for random-generating functions</p></li>
-<li><p>always include libraries, the reprex package can help</p></li>
-</ul>
 <p><br></p>
-<p>The following examples will use these libraries</p>
+<p>We will use these libraries</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(rocqi)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(rocqi) <span class="co"># internal to CHOP</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section>
-<section id="why" class="title-slide slide level1 center">
-<h1>Why</h1>
-
+<section id="reproducible-examples" class="title-slide slide level1 center">
+<h1>Reproducible Examples</h1>
+<p><code>reprex</code> is shorthand for a <code>rep</code>roducible <code>ex</code>ample <br> It should be as little code as required for other people to run your code</p>
 </section>
 <section id="lets-look-at-an-example" class="slide level2">
 <h2>Let’s look at an example</h2>
@@ -437,7 +428,7 @@ Jake Riley 3/2/2023
 <div class="column">
 <p>Original</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="1-3,15-16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>score_percent <span class="ot">&lt;-</span> </span>
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="1-4,15-16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>score_percent <span class="ot">&lt;-</span> </span>
 <span id="cb2-2"><a href="#cb2-2"></a>  respondents_clean <span class="sc">|&gt;</span> </span>
 <span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">count</span>(group, score_raw) <span class="sc">|&gt;</span> </span>
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span> </span>
@@ -462,7 +453,7 @@ Jake Riley 3/2/2023
 </div><div class="column">
 <p>Reprex</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="1,2,4,17,20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(lubridate)</span>
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="1,2,4,6,7,17,20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a>score_percent <span class="ot">&lt;-</span></span>
@@ -490,6 +481,21 @@ Jake Riley 3/2/2023
 </div>
 </div>
 </section>
+<section id="getting-help-in-r" class="slide level2">
+<h2>Getting help in R</h2>
+<p><strong>Pointers</strong></p>
+<ul>
+<li><p>use built-in datasets</p></li>
+<li><p><code>dput()</code> + <code>datapasta</code> to recreate data</p></li>
+<li><p><code>set.seed()</code> for random-generating functions</p></li>
+<li><p>always include libraries, the <code>reprex</code> package can help</p></li>
+</ul>
+</section></section>
+<section>
+<section id="built-in-data" class="title-slide slide level1 center">
+<h1>Built-in Data</h1>
+<p>There are data sets and constants in R that can help you mock up your code</p>
+</section>
 <section id="use-built-in-dates" class="slide level2">
 <h2>Use built-in dates</h2>
 <p>Use <code>Sys.time()</code> and <code>Sys.Date()</code></p>
@@ -499,38 +505,107 @@ Jake Riley 3/2/2023
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="at">surgery_date =</span> <span class="fu">Sys.Date</span>() <span class="sc">+</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span> <span class="sc">*</span> <span class="dv">7</span>),</span>
 <span id="cb4-4"><a href="#cb4-4"></a>  <span class="at">date_dist =</span> surgery_date <span class="sc">-</span> <span class="fu">as.Date</span>(date_requested)</span>
 <span id="cb4-5"><a href="#cb4-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  date_requested      surgery_date date_dist
-  &lt;dttm&gt;              &lt;date&gt;       &lt;drtn&gt;   
-1 2023-03-02 12:07:55 2023-03-09    7 days  
-2 2023-03-02 12:08:55 2023-03-16   14 days  
-3 2023-03-02 12:09:55 2023-03-23   21 days  
-4 2023-03-02 12:10:55 2023-03-30   28 days  
-5 2023-03-02 12:11:55 2023-04-06   35 days  
-6 2023-03-02 12:12:55 2023-04-13   42 days  </code></pre>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">date_requested</th>
+<th style="text-align: left;">surgery_date</th>
+<th style="text-align: left;">date_dist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2023-03-02 13:33:32</td>
+<td style="text-align: left;">2023-03-09</td>
+<td style="text-align: left;">7 days</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2023-03-02 13:34:32</td>
+<td style="text-align: left;">2023-03-16</td>
+<td style="text-align: left;">14 days</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2023-03-02 13:35:32</td>
+<td style="text-align: left;">2023-03-23</td>
+<td style="text-align: left;">21 days</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2023-03-02 13:36:32</td>
+<td style="text-align: left;">2023-03-30</td>
+<td style="text-align: left;">28 days</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2023-03-02 13:37:32</td>
+<td style="text-align: left;">2023-04-06</td>
+<td style="text-align: left;">35 days</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2023-03-02 13:38:32</td>
+<td style="text-align: left;">2023-04-13</td>
+<td style="text-align: left;">42 days</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <p>I like starting with a <code>tibble()</code> instead of <code>data.frame()</code> since you can use columns made at the time</p>
 </section>
 <section id="use-built-in-letters" class="slide level2">
 <h2>Use built-in <code>letters</code></h2>
+<p>Note <code>rep(..., each)</code> vs <code>rep(..., times)</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="at">surgeon =</span> <span class="fu">rep</span>(LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">each =</span> <span class="dv">2</span>),</span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="at">location =</span> <span class="fu">rep</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">times =</span> <span class="dv">2</span>),</span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="at">op_note =</span> sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>] <span class="co"># comes from stringr</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  surgeon location op_note                                    
-  &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;                                      
-1 A       a        The birch canoe slid on the smooth planks. 
-2 A       b        Glue the sheet to the dark blue background.
-3 B       c        It's easy to tell the depth of a well.     
-4 B       a        These days a chicken leg is a rare dish.   
-5 C       b        Rice is often served in round bowls.       
-6 C       c        The juice of lemons makes fine punch.      </code></pre>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="at">surgeon =</span> <span class="fu">rep</span>(LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="at">location =</span> <span class="fu">rep</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="at">op_note =</span> sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>] <span class="co"># comes from stringr</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">surgeon</th>
+<th style="text-align: left;">location</th>
+<th style="text-align: left;">op_note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: left;">The birch canoe slid on the smooth planks.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;">Glue the sheet to the dark blue background.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">c</td>
+<td style="text-align: left;">It’s easy to tell the depth of a well.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">a</td>
+<td style="text-align: left;">These days a chicken leg is a rare dish.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;">Rice is often served in round bowls.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">c</td>
+<td style="text-align: left;">The juice of lemons makes fine punch.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </section>
@@ -538,55 +613,154 @@ Jake Riley 3/2/2023
 <h2>Use <code>sentences</code> for regex</h2>
 <p>This comes from <code>stringr</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="at">note_text =</span> sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">last_word =</span> <span class="fu">str_extract</span>(note_text, <span class="st">"</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">.$"</span>) <span class="co"># don't want "."</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-  note_text                                   last_word  
-  &lt;chr&gt;                                       &lt;chr&gt;      
-1 The birch canoe slid on the smooth planks.  planks.    
-2 Glue the sheet to the dark blue background. background.
-3 It's easy to tell the depth of a well.      well.      
-4 These days a chicken leg is a rare dish.    dish.      
-5 Rice is often served in round bowls.        bowls.     </code></pre>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="at">note_text =</span> sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="at">last_word =</span> <span class="fu">str_extract</span>(note_text, <span class="st">"</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">.$"</span>) <span class="co"># don't want "."</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">note_text</th>
+<th style="text-align: left;">last_word</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">The birch canoe slid on the smooth planks.</td>
+<td style="text-align: left;">planks.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Glue the sheet to the dark blue background.</td>
+<td style="text-align: left;">background.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">It’s easy to tell the depth of a well.</td>
+<td style="text-align: left;">well.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">These days a chicken leg is a rare dish.</td>
+<td style="text-align: left;">dish.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rice is often served in round bowls.</td>
+<td style="text-align: left;">bowls.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </section>
 <section id="mock-up-missing-values-from-scratch" class="slide level2">
 <h2>Mock up missing values from scratch</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">2</span>),</span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">"a"</span>, <span class="cn">NA</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     1 &lt;NA&gt; 
-2    NA a    
-3     2 &lt;NA&gt; </code></pre>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">2</span>),</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">"a"</span>, <span class="cn">NA</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">x</th>
+<th style="text-align: left;">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">a</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </section>
 <section id="mock-up-missing-values-using-existing-data" class="slide level2">
 <h2>Mock up missing values using existing data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">head</span>(mtcars) <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">mutate_all</span>(<span class="co"># make NA if rows are in 2 or 4</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>    <span class="sc">~</span><span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="cn">NA</span>, .x)</span>
-<span id="cb12-5"><a href="#cb12-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                   mpg cyl disp  hp drat
-Mazda RX4         21.0   6  160 110 3.90
-Mazda RX4 Wag       NA  NA   NA  NA   NA
-Datsun 710        22.8   4  108  93 3.85
-Hornet 4 Drive      NA  NA   NA  NA   NA
-Hornet Sportabout 18.7   8  360 175 3.15
-Valiant           18.1   6  225 105 2.76</code></pre>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">head</span>(mtcars) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">mutate_all</span>(<span class="co"># make NA if rows are in 2 or 4</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="sc">~</span><span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="cn">NA</span>, .x)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">mpg</th>
+<th style="text-align: right;">cyl</th>
+<th style="text-align: right;">disp</th>
+<th style="text-align: right;">hp</th>
+<th style="text-align: right;">drat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mazda RX4</td>
+<td style="text-align: right;">21.0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">3.90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mazda RX4 Wag</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Datsun 710</td>
+<td style="text-align: right;">22.8</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">3.85</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hornet 4 Drive</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hornet Sportabout</td>
+<td style="text-align: right;">18.7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">360</td>
+<td style="text-align: right;">175</td>
+<td style="text-align: right;">3.15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Valiant</td>
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">225</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">2.76</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </section>
@@ -595,248 +769,468 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <p>If you need help with an spc chart, look in the help page</p>
 <p>Using <code>?spc</code> gives this example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">spc</span>(</span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="at">data =</span> sepsis,</span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="at">x =</span> hospital_admit_date,</span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="at">y =</span> abx_30_min_ind,</span>
-<span id="cb14-5"><a href="#cb14-5"></a>  <span class="at">chart =</span> <span class="st">"p"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6"></a>  <span class="at">part_dates =</span> <span class="st">"2022-06-01"</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">spc</span>(</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="at">data =</span> sepsis,</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="at">x =</span> hospital_admit_date,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="at">y =</span> abx_30_min_ind,</span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="at">chart =</span> <span class="st">"p"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="at">part_dates =</span> <span class="st">"2022-06-01"</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section></section>
+<section>
+<section id="random-numbers" class="title-slide slide level1 center">
+<h1>Random numbers</h1>
+
 </section>
 <section id="use-built-in-distribution-functions" class="slide level2">
 <h2>Use built-in distribution functions</h2>
-<p>.pull-left[ <code>rnorm()</code> gives a normal distribution</p>
+<div class="columns">
+<div class="column">
+<p><code>rnorm()</code> gives a normal distribution</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">hist</span>(</span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">rnorm</span>(<span class="dv">2000</span>, <span class="at">mean =</span> <span class="fl">0.5</span>, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">hist</span>(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">rnorm</span>(<span class="dv">2000</span>, <span class="at">mean =</span> <span class="dv">12</span>, <span class="at">sd =</span> <span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img data-src="reprex-r_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
 </div>
 </div>
-<p>]</p>
-<p>.pull-right[ <code>rbeta()</code> gives a skewed distribution</p>
+</div><div class="column">
+<p><code>rbeta()</code> gives a skewed distribution</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">hist</span>(</span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">rbeta</span>(<span class="dv">2000</span>, <span class="at">shape1 =</span> <span class="dv">2</span>, <span class="at">shape2 =</span> <span class="dv">10</span>)</span>
-<span id="cb16-3"><a href="#cb16-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">hist</span>(</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">rbeta</span>(<span class="dv">2000</span>, <span class="at">shape1 =</span> <span class="dv">2</span>, <span class="at">shape2 =</span> <span class="dv">10</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img data-src="reprex-r_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
 </div>
 </div>
-<p>]</p>
+</div>
+</div>
 </section>
 <section id="use-built-in-distribution-functions-1" class="slide level2">
 <h2>Use built-in distribution functions</h2>
 <p>You can use this to mock up your data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="co"># normal age distribution</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="at">age =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">mean =</span> <span class="dv">10</span>, <span class="at">sd =</span> <span class="dv">3</span>),</span>
-<span id="cb17-4"><a href="#cb17-4"></a>  <span class="co"># skewed LOS distribution up to 2 weeks</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>  <span class="at">los_days =</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">shape1 =</span> <span class="dv">2</span>, <span class="at">shape2 =</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">14</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>            <span class="co"># ------------- 0 to 1 ------------ x 14 days</span></span>
-<span id="cb17-7"><a href="#cb17-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-    age los_days
-  &lt;dbl&gt;    &lt;dbl&gt;
-1 14.3      1.68
-2  8.62     1.32
-3 10.3      4.62
-4 13.5      1.67
-5  7.35     2.39
-6  9.26     4.95</code></pre>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="co"># normal age distribution</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="at">age =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">mean =</span> <span class="dv">12</span>, <span class="at">sd =</span> <span class="dv">3</span>),</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="co"># skewed LOS distribution up to 2 weeks</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a>  <span class="at">los_days =</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">shape1 =</span> <span class="dv">2</span>, <span class="at">shape2 =</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">14</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>            <span class="co"># ------------- 0 to 1 ------------ x 14 days</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">age</th>
+<th style="text-align: right;">los_days</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">14.569773</td>
+<td style="text-align: right;">3.1885537</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6.513194</td>
+<td style="text-align: right;">0.5910689</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14.388133</td>
+<td style="text-align: right;">0.6958509</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12.669842</td>
+<td style="text-align: right;">3.8553480</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8.378151</td>
+<td style="text-align: right;">2.7201968</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9.886000</td>
+<td style="text-align: right;">1.4323887</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </section>
 <section id="use-set.seed-for-reproducible-randomness" class="slide level2">
 <h2>Use <code>set.seed()</code> for reproducible randomness</h2>
-<p>Without a “seed”, random number functions like <code>rnorm()</code> will give different results each time</p>
+<p>Without a “seed”, random number functions will give different results each time</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  1.7960442 -0.1822920 -1.0406124 -0.3754758 -0.5264551</code></pre>
+<pre><code>[1] -0.582622547 -0.047502227  0.149996696  0.003945797  1.398538118</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.4654264  1.2003298  0.5138689  0.3826952 -0.1714540</code></pre>
+<pre><code>[1]  0.56220670 -1.28747391 -1.01919577 -0.05288821  1.27153522</code></pre>
 </div>
 </div>
-</section>
-<section id="use-set.seed-for-reproducible-randomness-1" class="slide level2">
-<h2>Use <code>set.seed()</code> for reproducible randomness</h2>
-<p>Using <code>set.seed()</code> will make sure that the random number generator starts at the same point each time. Note: it needs to be right before random fn or in the right order</p>
+<p><br><br> Using <code>set.seed()</code> will make sure that the random number generator starts at the same point each time. Note: it needs to be right before random fn or in the right order</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">set.seed</span>(<span class="dv">2022</span>) </span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>) </span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.9001420 -1.1733458 -0.8974854 -1.4445014 -0.3310136</code></pre>
+<pre><code>[1] -0.08378436 -0.98294375 -1.87506732 -0.18614466 -0.63348570</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">set.seed</span>(<span class="dv">2022</span>) </span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>) </span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">rnorm</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.9001420 -1.1733458 -0.8974854 -1.4445014 -0.3310136</code></pre>
+<pre><code>[1] -0.08378436 -0.98294375 -1.87506732 -0.18614466 -0.63348570</code></pre>
 </div>
 </div>
+</section></section>
+<section>
+<section id="the-reprex-package" class="title-slide slide level1 center">
+<h1>The <code>reprex</code> package</h1>
+<p>Developed by Jenny Bryan and widely used</p>
 </section>
-<section id="the-reprex-package" class="slide level2">
-<h2>The <code>reprex</code> package</h2>
-<p>Copy to code to your clipboard then use <code>reprex::reprex_slack()</code> in console or highlight code in source pane and use <code>reprex</code> add-in</p>
+<section id="its-easy-to-use" class="slide level2">
+<h2>It’s easy to use</h2>
+<p>Copy code to your clipboard then use <code>reprex::reprex_selection()</code> in console <br> or highlight code in source pane and use <code>reprex</code> add-in</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>mpg <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> Sys.Date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>mtcars <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> Sys.Date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>mpg <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> Sys.Date)</span>
-<span id="cb28-3"><a href="#cb28-3"></a><span class="co">#&gt; Error in mutate(mpg, x = Sys.Date): could not find function "mutate"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>```r
+mpg |&gt;
+  mutate(x = Sys.Date)
+#&gt; Error in mutate(mpg, x = Sys.Date): could not find function "mutate"
+```</code></pre>
+<p>Try again…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb23-2"><a href="#cb23-2"></a></span>
+<span id="cb23-3"><a href="#cb23-3"></a>mtcars <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> Sys.Date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>```r
+library(tidyverse)
+
+mpg |&gt;
+  mutate(x = Sys.Date)
+#&gt; Error in `mutate()`:
+#&gt; ℹ In argument: `x = Sys.Date`.
+#&gt; Caused by error:
+#&gt; ! `x` must be a vector, not a function.
+```</code></pre>
+<p>One more time…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb25-2"><a href="#cb25-2"></a></span>
+<span id="cb25-3"><a href="#cb25-3"></a>mtcars <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">Sys.Date</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><span class="emoji" data-emoji="tada">🎉</span> <span class="emoji" data-emoji="tada">🎉</span> <span class="emoji" data-emoji="tada">🎉</span></p>
+<pre><code>``` r
+library(tidyverse)
+
+mtcars |&gt;
+  mutate(x = Sys.Date())
+#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb          x
+#&gt; Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4 2023-03-02
+#&gt; Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4 2023-03-02 
+#&gt; Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1 2023-03-02
+#&gt; Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1 2023-03-02
+#&gt; Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2 2023-03-02
+```</code></pre>
+</section></section>
+<section>
+<section id="actually-send-your-data" class="title-slide slide level1 center">
+<h1>Actually send your data</h1>
+
 </section>
-<section id="dput" class="slide level2">
-<h2><code>dput()</code></h2>
+<section id="dput-structure" class="slide level2">
+<h2><code>dput()</code> &amp; <code>structure()</code></h2>
 <p>Use <code>dput()</code> to “export” the structure of your data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>your_data <span class="ot">&lt;-</span> <span class="fu">head</span>(ToothGrowth, <span class="dv">3</span>)</span>
-<span id="cb29-2"><a href="#cb29-2"></a><span class="fu">dput</span>(your_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>your_data <span class="ot">&lt;-</span> <span class="fu">head</span>(ToothGrowth, <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="fu">dput</span>(your_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>structure(list(len = c(4.2, 11.5, 7.3), supp = structure(c(2L, 
 2L, 2L), levels = c("OJ", "VC"), class = "factor"), dose = c(0.5, 
-0.5, 0.5)), row.names = c(NA, 3L), class = "data.frame")</code></pre>
+0.5, 0.5)), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, 
+-3L))</code></pre>
 </div>
 </div>
-</section>
-<section id="structure" class="slide level2">
-<h2><code>structure()</code></h2>
 <p>Assign the results of <code>dput()</code> to a new object</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>my_data <span class="ot">&lt;-</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">structure</span>(</span>
-<span id="cb31-3"><a href="#cb31-3"></a>    <span class="fu">list</span>(</span>
-<span id="cb31-4"><a href="#cb31-4"></a>      <span class="at">len =</span> <span class="fu">c</span>(<span class="fl">4.2</span>, <span class="fl">11.5</span>, <span class="fl">7.3</span>),</span>
-<span id="cb31-5"><a href="#cb31-5"></a>      <span class="at">supp =</span> <span class="fu">structure</span>(<span class="fu">c</span>(2L, 2L, 2L), <span class="at">.Label =</span> <span class="fu">c</span>(<span class="st">"OJ"</span>, <span class="st">"VC"</span>), <span class="at">class =</span> <span class="st">"factor"</span>),</span>
-<span id="cb31-6"><a href="#cb31-6"></a>      <span class="at">dose =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
-<span id="cb31-7"><a href="#cb31-7"></a>    ),</span>
-<span id="cb31-8"><a href="#cb31-8"></a>    <span class="at">row.names =</span> <span class="fu">c</span>(<span class="cn">NA</span>, 3L),</span>
-<span id="cb31-9"><a href="#cb31-9"></a>    <span class="at">class =</span> <span class="st">"data.frame"</span></span>
-<span id="cb31-10"><a href="#cb31-10"></a>  )</span>
-<span id="cb31-11"><a href="#cb31-11"></a></span>
-<span id="cb31-12"><a href="#cb31-12"></a><span class="fu">identical</span>(your_data, my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>my_data <span class="ot">&lt;-</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">structure</span>(</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    <span class="fu">list</span>(</span>
+<span id="cb29-4"><a href="#cb29-4"></a>      <span class="at">len =</span> <span class="fu">c</span>(<span class="fl">4.2</span>, <span class="fl">11.5</span>, <span class="fl">7.3</span>),</span>
+<span id="cb29-5"><a href="#cb29-5"></a>      <span class="at">supp =</span> <span class="fu">structure</span>(<span class="fu">c</span>(2L, 2L, 2L), <span class="at">.Label =</span> <span class="fu">c</span>(<span class="st">"OJ"</span>, <span class="st">"VC"</span>), <span class="at">class =</span> <span class="st">"factor"</span>),</span>
+<span id="cb29-6"><a href="#cb29-6"></a>      <span class="at">dose =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb29-7"><a href="#cb29-7"></a>    ),</span>
+<span id="cb29-8"><a href="#cb29-8"></a>    <span class="at">row.names =</span> <span class="fu">c</span>(<span class="cn">NA</span>, 3L),</span>
+<span id="cb29-9"><a href="#cb29-9"></a>    <span class="at">class =</span> <span class="fu">c</span>(<span class="st">"tbl_df"</span>, <span class="st">"tbl"</span>, <span class="st">"data.frame"</span>)</span>
+<span id="cb29-10"><a href="#cb29-10"></a>  )</span>
+<span id="cb29-11"><a href="#cb29-11"></a></span>
+<span id="cb29-12"><a href="#cb29-12"></a><span class="fu">identical</span>(your_data, my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
 </section>
-<section id="clipr-and-datapasta" class="slide level2">
-<h2><code>clipr</code> and <code>datapasta</code></h2>
-<p>Copy data to your clipboard</p>
+<section id="datapasta" class="slide level2">
+<h2><code>datapasta</code></h2>
+<p>Make a reproducible example with this or the add-in: <code>datapasta</code> &gt; <code>fiddle_selection</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>your_data <span class="sc">|&gt;</span> clipr<span class="sc">::</span><span class="fu">write_clip</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>your_data <span class="sc">|&gt;</span> datapasta<span class="sc">::</span><span class="fu">dpasta</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Use add-ins: <code>datapasta</code> &gt; <code>paste as tribble</code>. Also works with data on your clipboard from excel</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb34-2"><a href="#cb34-2"></a>  <span class="sc">~</span>len, <span class="sc">~</span>supp, <span class="sc">~</span>dose,</span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fl">4.2</span>, <span class="st">"VC"</span>, <span class="fl">0.5</span>,</span>
-<span id="cb34-4"><a href="#cb34-4"></a>  <span class="fl">11.5</span>, <span class="st">"VC"</span>, <span class="fl">0.5</span>,</span>
-<span id="cb34-5"><a href="#cb34-5"></a>  <span class="fl">7.3</span>, <span class="st">"VC"</span>, <span class="fl">0.5</span></span>
-<span id="cb34-6"><a href="#cb34-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 3
-    len supp   dose
-  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
-1   4.2 VC      0.5
-2  11.5 VC      0.5
-3   7.3 VC      0.5</code></pre>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>your_data <span class="ot">&lt;-</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>  tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb32-3"><a href="#cb32-3"></a>    <span class="sc">~</span>len, <span class="sc">~</span>supp, <span class="sc">~</span>dose,</span>
+<span id="cb32-4"><a href="#cb32-4"></a>     <span class="fl">4.2</span>,  <span class="st">"VC"</span>,   <span class="fl">0.5</span>,</span>
+<span id="cb32-5"><a href="#cb32-5"></a>    <span class="fl">11.5</span>,  <span class="st">"VC"</span>,   <span class="fl">0.5</span>,</span>
+<span id="cb32-6"><a href="#cb32-6"></a>     <span class="fl">7.3</span>,  <span class="st">"VC"</span>,   <span class="fl">0.5</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+<p>For data copied from excel, copy to your clipboard and use the add-in: <code>datapasta</code> &gt; <code>paste as tribble</code>.</p>
 </section>
 <section id="keep-things-minimal" class="slide level2">
 <h2>Keep things minimal</h2>
 <p>Just select the colums you need and a minimal # of rows</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co">#   row  col</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a>mpg[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  manufacturer model
-  &lt;chr&gt;        &lt;chr&gt;
-1 audi         a4   
-2 audi         a4   
-3 audi         a4   </code></pre>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">head</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">height</th>
+<th style="text-align: right;">mass</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Luke Skywalker</td>
+<td style="text-align: right;">172</td>
+<td style="text-align: right;">77</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C-3PO</td>
+<td style="text-align: right;">167</td>
+<td style="text-align: right;">75</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <p>A row of 1 is often enough</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">head</span>(mpg, <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co">#dput()</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a>  <span class="fu">mutate_if</span>(is.character, toupper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 11
-  manufacturer model displ  year   cyl trans    drv     cty   hwy fl    class  
-  &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  
-1 AUDI         A4      1.8  1999     4 AUTO(L5) F        18    29 P     COMPACT</code></pre>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">head</span>(mpg, <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co"># use dput() here</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>  <span class="fu">mutate_if</span>(is.character, toupper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 13%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">manufacturer</th>
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">displ</th>
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">cyl</th>
+<th style="text-align: left;">trans</th>
+<th style="text-align: left;">drv</th>
+<th style="text-align: right;">cty</th>
+<th style="text-align: right;">hwy</th>
+<th style="text-align: left;">fl</th>
+<th style="text-align: left;">class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AUDI</td>
+<td style="text-align: left;">A4</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">AUTO(L5)</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: left;">P</td>
+<td style="text-align: left;">COMPACT</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-</section>
-<section id="built-in-data" class="slide level2">
-<h2>Built-in data</h2>
-<ul>
-<li>see all data sets with
-<ul>
-<li><code>data()</code></li>
-<li><code>data(package = "rocqi")</code></li>
-</ul></li>
-<li>base R
-<ul>
-<li><code>iris</code></li>
-<li><code>ToothGrowth</code></li>
-<li><code>quakes</code> - mapping</li>
-</ul></li>
-<li><a href="https://ggplot2.tidyverse.org/reference/index.html#section-data"><code>ggplot2</code></a> - all 3 good for plotting, mix of categorical &amp; numeric
-<ul>
-<li><code>mpg</code></li>
-<li><code>diamonds</code></li>
-<li><code>msleep</code></li>
-<li><code>map_data</code> - map polygons (<a href="https://ggplot2.tidyverse.org/reference/map_data.html">see vignette</a>)</li>
-</ul></li>
-</ul>
-</section>
-<section id="built-in-data-1" class="slide level2">
-<h2>Built-in data</h2>
-<ul>
-<li><a href="https://tidyr.tidyverse.org/reference/index.html#data"><code>tidyr</code></a>
-<ul>
-<li><code>us_rent_income</code> - pivoting</li>
-<li><code>population</code> - longitudinal</li>
-</ul></li>
-<li><a href="https://dplyr.tidyverse.org/reference/index.html#section-data"><code>dplyr</code></a>
-<ul>
-<li><code>storms</code> - longitudinal</li>
-<li><code>starwars</code> - lists, missingness, comma separated values</li>
-</ul></li>
-</ul>
-</section>
-<section id="built-in-data-2" class="slide level2">
-<h2>Built-in data</h2>
-<ul>
-<li><code>sf</code>
-<ul>
-<li><code>st_read(system.file("shape/nc.shp", package="sf"))</code> - comes with install</li>
-</ul></li>
-<li><a href="https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets"><code>rocqi</code></a>
-<ul>
-<li><code>ed_fractures</code></li>
-<li><code>surgeries</code></li>
-</ul></li>
-</ul>
-</section>
-<section id="this-app" class="slide level2">
-<h2>This app</h2>
-<p>https://rjake.shinyapps.io/Find-Good-Data/</p>
+</div>
 </section></section>
 <section>
-<section id="live-demo" class="title-slide slide level1 center">
-<h1>Live Demo</h1>
-<p>https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-reprex.R</p>
+<section id="built-in-data-1" class="title-slide slide level1 center">
+<h1>Built-in data</h1>
+<p>see all data sets with</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">data</span>()</span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">"dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="some-good-ones-to-know" class="slide level2">
+<h2>Some good ones to know</h2>
+<p>base R</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>iris</span>
+<span id="cb36-2"><a href="#cb36-2"></a>mtcars</span>
+<span id="cb36-3"><a href="#cb36-3"></a>airquality</span>
+<span id="cb36-4"><a href="#cb36-4"></a>Orange</span>
+<span id="cb36-5"><a href="#cb36-5"></a>ToothGrowth</span>
+<span id="cb36-6"><a href="#cb36-6"></a>quakes <span class="co"># mapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="how-is-this-helpful" class="slide level2 smaller">
+<h2>How is this helpful?</h2>
+<div class="columns">
+<div class="column">
+<p>Rename columns for plots</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="2,5,6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>df <span class="ot">&lt;-</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  ggplot2<span class="sc">::</span>economics <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">head</span>(<span class="dv">3</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-4"><a href="#cb37-4"></a>  <span class="fu">select</span>(</span>
+<span id="cb37-5"><a href="#cb37-5"></a>    <span class="at">recorded_date =</span> date,</span>
+<span id="cb37-6"><a href="#cb37-6"></a>    <span class="at">lab_value =</span> pce</span>
+<span id="cb37-7"><a href="#cb37-7"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">recorded_date</th>
+<th style="text-align: right;">lab_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1967-07-01</td>
+<td style="text-align: right;">506.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1967-08-01</td>
+<td style="text-align: right;">509.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1967-09-01</td>
+<td style="text-align: right;">515.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Mix and match pieces</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb38-2"><a href="#cb38-2"></a>  <span class="at">hospital_admit_date =</span> economics<span class="sc">$</span>date[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],</span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="at">losandays =</span> economics<span class="sc">$</span>uempmed[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],</span>
+<span id="cb38-4"><a href="#cb38-4"></a>  <span class="at">name =</span> starwars<span class="sc">$</span>name[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],</span>
+<span id="cb38-5"><a href="#cb38-5"></a>  <span class="at">note_text =</span> stringr<span class="sc">::</span>sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span>
+<span id="cb38-6"><a href="#cb38-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table>
+<colgroup>
+<col style="width: 22%">
+<col style="width: 11%">
+<col style="width: 16%">
+<col style="width: 49%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">hospital_admit_date</th>
+<th style="text-align: right;">losandays</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">note_text</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1967-07-01</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: left;">Luke Skywalker</td>
+<td style="text-align: left;">The birch canoe slid on the smooth planks.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1967-08-01</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: left;">C-3PO</td>
+<td style="text-align: left;">Glue the sheet to the dark blue background.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1967-09-01</td>
+<td style="text-align: right;">4.6</td>
+<td style="text-align: left;">R2-D2</td>
+<td style="text-align: left;">It’s easy to tell the depth of a well.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="others" class="slide level2">
+<h2>Others</h2>
+<p><a href="https://ggplot2.tidyverse.org/reference/index.html#section-data"><code>ggplot2</code></a> - all 3 good for plotting, mix of categorical &amp; numeric</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>mpg</span>
+<span id="cb39-2"><a href="#cb39-2"></a>diamonds</span>
+<span id="cb39-3"><a href="#cb39-3"></a>msleep</span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="fu">map_data</span>(<span class="st">"state"</span>) <span class="co">#see vignette: https://ggplot2.tidyverse.org/reference/map_data.html</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="https://tidyr.tidyverse.org/reference/index.html#data"><code>tidyr</code></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>us_rent_income <span class="co"># pivoting</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>population <span class="co"># longitudinal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="https://dplyr.tidyverse.org/reference/index.html#section-data"><code>dplyr</code></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>storms <span class="co"># longitudinal</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>starwars <span class="co"># lists, missingness, comma separated values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="https://r-spatial.github.io/sf/articles/sf3.html"><code>sf</code></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="at">package=</span><span class="st">"sf"</span>) <span class="sc">|&gt;</span> <span class="co"># comes with install</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">st_read</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><a href="https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets"><code>rocqi</code></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>ed_fractures</span>
+<span id="cb43-2"><a href="#cb43-2"></a>surgeries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and this app</p>
+<p><a href="https://rjake.shinyapps.io/Find-Good-Data/">https://rjake.shinyapps.io/Find-Good-Data</a></p>
 </section>
 <section id="takeaways" class="slide level2">
 <h2>Takeaways</h2>
@@ -856,95 +1250,87 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 <h1>SQL</h1>
 
 </section>
-<section id="getting-help-in-sql" class="slide level2">
-<h2>Getting help in SQL</h2>
-<p><strong>Pointers</strong></p>
-<ul>
-<li><p>use <code>select</code> without a <code>from</code> statement</p></li>
-<li><p>mock up CTEs with <code>select</code> + <code>union</code></p></li>
-<li><p>use reserved words like <code>current_date</code> to mock up data types</p></li>
-<li><p>write a small sample to <code>qmr_dev</code> if all else fails</p></li>
-</ul>
-</section>
-<section id="can-use-select-alone-no-from-statement" class="slide level2">
-<h2>can use select alone, no ‘from’ statement</h2>
+<section id="use-select-without-a-from-statement" class="slide level2">
+<h2>Use <code>select</code> without a <code>from</code> statement</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">select</span> <span class="dv">123</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb44-1"><a href="#cb44-1"></a><span class="kw">select</span> <span class="dv">123</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="use-built-in-date-values" class="slide level2">
 <h2>Use built-in date values</h2>
 <p><code>current_date</code> and <code>current_timestamp</code> are built in</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">select</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a>    <span class="fu">current_date</span> <span class="op">-</span> <span class="dv">2</span> <span class="kw">as</span> encounter_date,</span>
-<span id="cb41-3"><a href="#cb41-3"></a>    <span class="fu">current_timestamp</span> <span class="kw">as</span> surgery_time, <span class="co">-- also now()</span></span>
-<span id="cb41-4"><a href="#cb41-4"></a>    surgery_time:<span class="ch">:date</span> <span class="op">-</span> encounter_date <span class="kw">as</span> n_days,</span>
-<span id="cb41-5"><a href="#cb41-5"></a>    datetime(timezone(now(),  <span class="st">'UTC'</span>, <span class="st">'America/New_York'</span>)) <span class="kw">as</span> time_utc    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">select</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>    <span class="fu">current_date</span> <span class="op">-</span> <span class="dv">2</span> <span class="kw">as</span> encounter_date,</span>
+<span id="cb45-3"><a href="#cb45-3"></a>    <span class="fu">current_timestamp</span> <span class="kw">as</span> surgery_time, <span class="co">-- also now()</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a>    surgery_time:<span class="ch">:date</span> <span class="op">-</span> encounter_date <span class="kw">as</span> n_days,</span>
+<span id="cb45-5"><a href="#cb45-5"></a>    datetime(timezone(now(),  <span class="st">'UTC'</span>, <span class="st">'America/New_York'</span>)) <span class="kw">as</span> time_utc    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="mock-up-note_text" class="slide level2">
-<h2>Mock-up note_text</h2>
+<section id="mock-up-note-text" class="slide level2">
+<h2>Mock-up note text</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">select</span></span>
-<span id="cb42-2"><a href="#cb42-2"></a>    <span class="st">'I want the second word'</span> <span class="kw">as</span> note_text,</span>
-<span id="cb42-3"><a href="#cb42-3"></a>    regexp_extract(note_text, <span class="st">'\w+'</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="kw">as</span> second_word</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb46-1"><a href="#cb46-1"></a><span class="kw">select</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a>    <span class="st">'I want the second word'</span> <span class="kw">as</span> note_text,</span>
+<span id="cb46-3"><a href="#cb46-3"></a>    regexp_extract(note_text, <span class="st">'\w+'</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="kw">as</span> second_word</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="set-up-a-small-data-set-with-a-union-cte" class="slide level2">
 <h2>Set-up a small data set with a <code>union</code> CTE</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb43-1"><a href="#cb43-1"></a></span>
-<span id="cb43-2"><a href="#cb43-2"></a><span class="kw">with</span> </span>
-<span id="cb43-3"><a href="#cb43-3"></a>    clinic_list <span class="kw">as</span> (</span>
-<span id="cb43-4"><a href="#cb43-4"></a>              <span class="kw">select</span> <span class="st">'555-123-4567'</span> <span class="kw">as</span> phone_number</span>
-<span id="cb43-5"><a href="#cb43-5"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'555.123.4567'</span></span>
-<span id="cb43-6"><a href="#cb43-6"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'(555)123-4567'</span></span>
-<span id="cb43-7"><a href="#cb43-7"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'1-555-123-4567'</span> </span>
-<span id="cb43-8"><a href="#cb43-8"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'(555)123-4567 ext. 9'</span> </span>
-<span id="cb43-9"><a href="#cb43-9"></a>    )</span>
-<span id="cb43-10"><a href="#cb43-10"></a><span class="kw">select</span> </span>
-<span id="cb43-11"><a href="#cb43-11"></a>    phone_number,</span>
-<span id="cb43-12"><a href="#cb43-12"></a>    <span class="fu">regexp_replace</span>(</span>
-<span id="cb43-13"><a href="#cb43-13"></a>        phone_number,</span>
-<span id="cb43-14"><a href="#cb43-14"></a>        <span class="st">'^1?[^\d]*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*'</span>,</span>
-<span id="cb43-15"><a href="#cb43-15"></a>        <span class="st">'\1-\2-\3'</span></span>
-<span id="cb43-16"><a href="#cb43-16"></a>    ) <span class="kw">as</span> clean_number</span>
-<span id="cb43-17"><a href="#cb43-17"></a><span class="kw">from</span> clinic_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb47-1"><a href="#cb47-1"></a></span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="kw">with</span> </span>
+<span id="cb47-3"><a href="#cb47-3"></a>    clinic_list <span class="kw">as</span> (</span>
+<span id="cb47-4"><a href="#cb47-4"></a>              <span class="kw">select</span> <span class="st">'555-123-4567'</span> <span class="kw">as</span> phone_number</span>
+<span id="cb47-5"><a href="#cb47-5"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'555.123.4567'</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'(555)123-4567'</span></span>
+<span id="cb47-7"><a href="#cb47-7"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'1-555-123-4567'</span> </span>
+<span id="cb47-8"><a href="#cb47-8"></a>        <span class="kw">union</span> <span class="kw">select</span> <span class="st">'(555)123-4567 ext. 9'</span> </span>
+<span id="cb47-9"><a href="#cb47-9"></a>    )</span>
+<span id="cb47-10"><a href="#cb47-10"></a><span class="kw">select</span> </span>
+<span id="cb47-11"><a href="#cb47-11"></a>    phone_number,</span>
+<span id="cb47-12"><a href="#cb47-12"></a>    <span class="fu">regexp_replace</span>(</span>
+<span id="cb47-13"><a href="#cb47-13"></a>        phone_number,</span>
+<span id="cb47-14"><a href="#cb47-14"></a>        <span class="st">'^1?[^\d]*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*'</span>,</span>
+<span id="cb47-15"><a href="#cb47-15"></a>        <span class="st">'\1-\2-\3'</span></span>
+<span id="cb47-16"><a href="#cb47-16"></a>    ) <span class="kw">as</span> clean_number</span>
+<span id="cb47-17"><a href="#cb47-17"></a><span class="kw">from</span> clinic_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="put-a-subset-of-the-data-in-qmr_dev" class="slide level2">
 <h2>Put a subset of the data in <code>QMR_DEV</code></h2>
 <p>Put subset in qmr_dev for someone to help you if it does require a few CTEs to get to your output add a small helper <code>select</code> at the end of the CTE</p>
-<p>.pull-left[</p>
+<div class="columns">
+<div class="column">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb44-1"><a href="#cb44-1"></a><span class="op">*</span><span class="co">--create table abc as </span></span>
-<span id="cb44-2"><a href="#cb44-2"></a><span class="kw">with</span></span>
-<span id="cb44-3"><a href="#cb44-3"></a>    x <span class="kw">as</span> (</span>
-<span id="cb44-4"><a href="#cb44-4"></a>       <span class="kw">select</span> </span>
-<span id="cb44-5"><a href="#cb44-5"></a>       <span class="kw">from</span></span>
-<span id="cb44-6"><a href="#cb44-6"></a><span class="op">*</span>    ) <span class="co">--select * from x;</span></span>
-<span id="cb44-7"><a href="#cb44-7"></a></span>
-<span id="cb44-8"><a href="#cb44-8"></a>    , y <span class="kw">as</span> (</span>
-<span id="cb44-9"><a href="#cb44-9"></a>       <span class="kw">select</span> </span>
-<span id="cb44-10"><a href="#cb44-10"></a>       <span class="kw">from</span></span>
-<span id="cb44-11"><a href="#cb44-11"></a>    )</span>
-<span id="cb44-12"><a href="#cb44-12"></a></span>
-<span id="cb44-13"><a href="#cb44-13"></a><span class="kw">select</span> <span class="op">*</span></span>
-<span id="cb44-14"><a href="#cb44-14"></a><span class="kw">from</span> </span>
-<span id="cb44-15"><a href="#cb44-15"></a>   <span class="op">..</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb48-1"><a href="#cb48-1"></a><span class="co">--create table abc as </span></span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="kw">with</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a>x <span class="kw">as</span> (</span>
+<span id="cb48-4"><a href="#cb48-4"></a>   <span class="kw">select</span> </span>
+<span id="cb48-5"><a href="#cb48-5"></a>   <span class="kw">from</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a>) <span class="co">--select * from x;</span></span>
+<span id="cb48-7"><a href="#cb48-7"></a></span>
+<span id="cb48-8"><a href="#cb48-8"></a>, y <span class="kw">as</span> (</span>
+<span id="cb48-9"><a href="#cb48-9"></a>   <span class="kw">select</span> </span>
+<span id="cb48-10"><a href="#cb48-10"></a>   <span class="kw">from</span></span>
+<span id="cb48-11"><a href="#cb48-11"></a>)</span>
+<span id="cb48-12"><a href="#cb48-12"></a></span>
+<span id="cb48-13"><a href="#cb48-13"></a><span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb48-14"><a href="#cb48-14"></a><span class="kw">from</span> </span>
+<span id="cb48-15"><a href="#cb48-15"></a>   <span class="op">..</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>]</p>
-<p>.pull-right[ Remember to drop anything you don’t need long-term</p>
+</div><div class="column">
+<p>Remember to drop anything you don’t need long-term</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">drop</span> <span class="kw">table</span> abc <span class="cf">if</span> <span class="kw">exists</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource sql number-lines code-with-copy"><code class="sourceCode sql"><span id="cb49-1"><a href="#cb49-1"></a><span class="kw">drop</span> <span class="kw">table</span> abc <span class="cf">if</span> <span class="kw">exists</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>]</p>
+</div>
+</div>
 </section></section>
 <section>
-<section id="live-demo-1" class="title-slide slide level1 center">
+<section id="live-demo" class="title-slide slide level1 center">
 <h1>Live Demo</h1>
-<p>https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql</p>
+<p><a href="https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql">https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql</a></p>
 </section>
 <section id="sql-takeaways" class="slide level2">
 <h2>SQL Takeaways</h2>
@@ -982,7 +1368,7 @@ Valiant           18.1   6  225 105 2.76</code></pre>
       // Full list of configuration options available at:
       // https://revealjs.com/config/
       Reveal.initialize({
-'controlsAuto': true,
+'controlsAuto': false,
 'previewLinksAuto': false,
 'smaller': false,
 'pdfSeparateFragments': false,
@@ -993,7 +1379,7 @@ Valiant           18.1   6  225 105 2.76</code></pre>
 'smaller': false,
  
         // Display controls in the bottom right corner
-        controls: false,
+        controls: true,
 
         // Help the user learn the controls by providing hints, for example by
         // bouncing the down arrow when they first encounter a vertical slide
@@ -1010,7 +1396,7 @@ Valiant           18.1   6  225 105 2.76</code></pre>
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',

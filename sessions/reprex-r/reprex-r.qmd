@@ -11,6 +11,10 @@ format:
     scrollable: true
     width: 1200
     height: 750
+    slide-number: c/t
+    controls: true
+    df-print: kable
+    #navigation-mode: grid
   gfm:
     output-file: README.md
     
@@ -32,37 +36,31 @@ options(
 
 * [slides](https://rjake.github.io/analytics-deep-dive/sessions/reprex-r) \| [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/README.md)
 
-* Examples in R
+* What is a reproducible example
 
-* Live demo
+* How to mock up data
+
+* Built in data sets
 
 * Recap
 
 * If time / interest... examples in SQL
 
-## Getting help in R
-
-**Pointers**
-
-* use built-in datasets
-
-* `dput()` + `datapasta` to recreate data
-
-* `set.seed()` for random-generating functions
-
-* always include libraries, the reprex package can help
-
 <br>
 
-The following examples will use these libraries
+We will use these libraries
 
 ```{r libraries}
-library(rocqi)
 library(tidyverse)
+library(rocqi) # internal to CHOP
 ```
 
+# Reproducible Examples
 
-# Why
+`reprex` is shorthand for a `rep`roducible `ex`ample
+<br>
+It should be as little code as required for other people to run your code
+
 
 ## Let's look at an example
 
@@ -74,7 +72,7 @@ Original
 
 ```{r}
 #| eval: false
-#| code-line-numbers: "1-3,15-16"
+#| code-line-numbers: "1-4,15-16"
 score_percent <- 
   respondents_clean |> 
   count(group, score_raw) |> 
@@ -117,7 +115,7 @@ tibble(
 Reprex
 
 ```{r}
-#| code-line-numbers: "1,2,4,17,20"
+#| code-line-numbers: "1,2,4,6,7,17,20"
 library(lubridate)
 library(tidyverse)
 
@@ -146,9 +144,24 @@ score_percent |>
 
 
 
+## Getting help in R
+
+**Pointers**
+
+* use built-in datasets
+
+* `dput()` + `datapasta` to recreate data
+
+* `set.seed()` for random-generating functions
+
+* always include libraries, the `reprex` package can help
 
 
 
+
+# Built-in Data
+
+There are data sets and constants in R that can help you mock up your code
 
 ## Use built-in dates
 
@@ -166,6 +179,9 @@ I like starting with a `tibble()` instead of `data.frame()` since you can use co
 
 
 ## Use built-in `letters`
+
+Note `rep(..., each)` vs `rep(..., times)`
+
 ```{r}
 tibble(
   surgeon = rep(LETTERS[1:3], each = 2),
@@ -229,26 +245,30 @@ spc(
 ```
 
 
+# Random numbers
 
 ## Use built-in distribution functions
 
-.pull-left[
+:::: {.columns}
+::: {.column}
 `rnorm()` gives a normal distribution
 ```{r, fig.height=5}
+
 hist(
-  rnorm(2000, mean = 0.5, sd = 0.1)
+  rnorm(2000, mean = 12, sd = 3)
 )
 ```
-]
+:::
 
-.pull-right[
+::: {.column}
 `rbeta()` gives a skewed distribution
 ```{r, fig.height=5}
 hist(
   rbeta(2000, shape1 = 2, shape2 = 10)
 )
 ```
-]
+:::
+::::
 
 
 
@@ -258,7 +278,7 @@ You can use this to mock up your data
 ```{r}
 tibble(
   # normal age distribution
-  age = rnorm(n = 6, mean = 10, sd = 3),
+  age = rnorm(n = 6, mean = 12, sd = 3),
   # skewed LOS distribution up to 2 weeks
   los_days = rbeta(n = 6, shape1 = 2, shape2 = 10) * 14
             # ------------- 0 to 1 ------------ x 14 days
@@ -269,54 +289,96 @@ tibble(
 
 ## Use `set.seed()` for reproducible randomness
 
-Without a "seed", random number functions like `rnorm()` will give different results each time
+Without a "seed", random number functions will give different results each time
 ```{r}
 rnorm(5)
 rnorm(5)
 ```
 
-
-
-## Use `set.seed()` for reproducible randomness
-
+<br><br>
 Using `set.seed()` will make sure that the random number generator starts at the same point each time. Note: it needs to be right before random fn or in the right order
 ```{r}
-set.seed(2022) 
+set.seed(2023) 
 rnorm(5)
 
-set.seed(2022) 
+set.seed(2023) 
 rnorm(5)
 ```
 
 
+# The `reprex` package
 
-## The `reprex` package
+Developed by Jenny Bryan and widely used
 
-Copy to code to your clipboard then use `reprex::reprex_slack()` in console or highlight code in source pane and use `reprex` add-in
+## It's easy to use
+
+Copy code to your clipboard then use `reprex::reprex_selection()` in console 
+<br> or highlight code in source pane and use `reprex` add-in
 ```{r, eval=FALSE}
-mpg |>
+mtcars |>
   mutate(x = Sys.Date)
 ```
 
-```r
-mpg |>
+
+    ```r
+    mpg |>
+      mutate(x = Sys.Date)
+    #> Error in mutate(mpg, x = Sys.Date): could not find function "mutate"
+    ```
+
+Try again...
+```{r, eval=FALSE}
+library(tidyverse)
+
+mtcars |>
   mutate(x = Sys.Date)
-#> Error in mutate(mpg, x = Sys.Date): could not find function "mutate"
 ```
 
 
+    ```r
+    library(tidyverse)
+    
+    mpg |>
+      mutate(x = Sys.Date)
+    #> Error in `mutate()`:
+    #> ℹ In argument: `x = Sys.Date`.
+    #> Caused by error:
+    #> ! `x` must be a vector, not a function.
+    ```
+One more time...
+```{r, eval=FALSE}
+library(tidyverse)
 
-## `dput()`
+mtcars |>
+  mutate(x = Sys.Date())
+```
+
+:tada: :tada: :tada:
+
+    ``` r
+    library(tidyverse)
+    
+    mtcars |>
+      mutate(x = Sys.Date())
+    #>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb          x
+    #> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4 2023-03-02
+    #> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4 2023-03-02 
+    #> Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1 2023-03-02
+    #> Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1 2023-03-02
+    #> Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2 2023-03-02
+    ```
+
+
+# Actually send your data
+
+## `dput()` & `structure()`
 
 Use `dput()` to "export" the structure of your data.
 ```{r}
-your_data <- head(ToothGrowth, 3)
+your_data <- head(ToothGrowth, 3) |> as_tibble()
 dput(your_data)
 ```
 
-
-
-## `structure()`
 
 Assign the results of `dput()` to a new object
 
@@ -329,100 +391,156 @@ my_data <-
       dose = c(0.5, 0.5, 0.5)
     ),
     row.names = c(NA, 3L),
-    class = "data.frame"
+    class = c("tbl_df", "tbl", "data.frame")
   )
 
 identical(your_data, my_data)
 ```
 
+## `datapasta`
 
-
-## `clipr` and `datapasta`
-
-Copy data to your clipboard
+Make a reproducible example with this or the add-in: `datapasta` > `fiddle_selection`
 
 ```{r, eval=FALSE}
-your_data |> clipr::write_clip() 
+your_data |> datapasta::dpasta()
 ```
-
-Use add-ins: `datapasta` > `paste as tribble`. Also works with data on your clipboard from excel
 
 ```{r}
-tibble::tribble(
-  ~len, ~supp, ~dose,
-  4.2, "VC", 0.5,
-  11.5, "VC", 0.5,
-  7.3, "VC", 0.5
-)
+your_data <-
+  tibble::tribble(
+    ~len, ~supp, ~dose,
+     4.2,  "VC",   0.5,
+    11.5,  "VC",   0.5,
+     7.3,  "VC",   0.5
+  )
 ```
 
+For data copied from excel, copy to your clipboard and use the add-in: `datapasta` > `paste as tribble`.
 
 
 ## Keep things minimal
 
 Just select the colums you need and a minimal # of rows
 ```{r}
-#   row  col
-mpg[1:3, 1:2]
+starwars |> 
+  select(1:3) |> 
+  head(2)
 ```
 
 A row of 1 is often enough
 ```{r}
-head(mpg, 1) |> #dput()
+head(mpg, 1) |> # use dput() here
   mutate_if(is.character, toupper)
 ```
 
 
 
+```{r sql-knitr, include=FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE
+)
+```
 
-## Built-in data 
-* see all data sets with
-    * `data()`
-    * `data(package = "rocqi")`
+# Built-in data 
 
-* base R
-    * `iris`
-    * `ToothGrowth`
-    * `quakes` - mapping
+see all data sets with
+```{r}
+data()
+data(package = "dplyr")
+```
 
-* [`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) - all 3 good for plotting, mix of categorical & numeric
-    * `mpg`
-    * `diamonds`
-    * `msleep`
-    * `map_data` - map polygons ([see vignette](https://ggplot2.tidyverse.org/reference/map_data.html))
-
-
-
-## Built-in data 
-
-* [`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
-    * `us_rent_income` - pivoting
-    * `population` - longitudinal
-
-* [`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
-    * `storms` - longitudinal
-    * `starwars` - lists, missingness, comma separated values
+## Some good ones to know
+base R
+```{r}
+iris
+mtcars
+airquality
+Orange
+ToothGrowth
+quakes # mapping
+```
 
 
+## How is this helpful? {.smaller}
 
-## Built-in data 
+:::: {.columns}
+::: {.column}
+Rename columns for plots
+```{r}
+#| eval: true
+#| code-line-numbers: "2,5,6"
+df <- 
+  ggplot2::economics |>
+  head(3) |> 
+  select(
+    recorded_date = date,
+    lab_value = pce
+  )
+```
+:::
 
-  * `sf`
-      * `st_read(system.file("shape/nc.shp", package="sf"))` - comes with install
+::: {.column}
+```{r}
+#| eval: true
+#| echo: false
+df
+```
+
+:::
+::::
+
+Mix and match pieces
+```{r}
+#| eval: true
+#| code-line-numbers: "2-5"
+tibble(
+  hospital_admit_date = economics$date[1:3],
+  losandays = economics$uempmed[1:3],
+  name = starwars$name[1:3],
+  note_text = stringr::sentences[1:3]
+)
+```
 
 
-  * [`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
-      * `ed_fractures`
-      * `surgeries`
+## Others
 
-## This app
+[`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) - all 3 good for plotting, mix of categorical & numeric
+```{r}
+mpg
+diamonds
+msleep
+map_data("state") #see vignette: https://ggplot2.tidyverse.org/reference/map_data.html
+```
 
-https://rjake.shinyapps.io/Find-Good-Data/
+[`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
+```{r}
+us_rent_income # pivoting
+population # longitudinal
+```
 
+[`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
+```{r}
+storms # longitudinal
+starwars # lists, missingness, comma separated values
+```
 
-# Live Demo
+[`sf`](https://r-spatial.github.io/sf/articles/sf3.html)
+```{r}
+system.file("shape/nc.shp", package="sf") |> # comes with install
+  st_read()
+```
 
-https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-reprex.R
+[`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
+
+```{r}
+ed_fractures
+surgeries
+```
+
+and this app
+
+[https://rjake.shinyapps.io/Find-Good-Data](https://rjake.shinyapps.io/Find-Good-Data/)
+
 
 ## Takeaways
 
@@ -439,27 +557,8 @@ https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/r-repre
 
 # SQL
 
-## Getting help in SQL
+## Use `select` without a `from` statement
 
-**Pointers**
-
-* use `select` without a `from` statement
-
-* mock up CTEs with `select` + `union`
-
-* use reserved words like `current_date` to mock up data types
-
-* write a small sample to `qmr_dev` if all else fails
-
-```{r sql-knitr, include=FALSE}
-knitr::opts_chunk$set(
-  eval = FALSE
-)
-```
-
-
-
-## can use select alone, no 'from' statement
 ```{sql reprex-sql}
 select 123
 ```
@@ -479,7 +578,7 @@ select
 
 
 
-## Mock-up note_text
+## Mock-up note text
 
 ```{sql}
 select
@@ -516,37 +615,39 @@ from clinic_list
 
 Put subset in qmr_dev for someone to help you if it does require a few CTEs to get to your output add a small helper `select` at the end of the CTE
 
-.pull-left[
+:::: {.columns}
+::: {.column}
 ```{sql}
-*--create table abc as 
+--create table abc as 
 with
-    x as (
-       select 
-       from
-*    ) --select * from x;
+x as (
+   select 
+   from
+) --select * from x;
 
-    , y as (
-       select 
-       from
-    )
+, y as (
+   select 
+   from
+)
 
 select *
 from 
    ...
 
 ```
-]
+:::
 
-.pull-right[
+::: {.column}
 Remember to drop anything you don't need long-term
 ```{sql}
 drop table abc if exists;
 ```
-]
+:::
+::::
 
 # Live Demo
 
-https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql
+[https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql](https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-reprex.sql)
 
 
 ## SQL Takeaways
@@ -559,7 +660,7 @@ https://github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex-r/sql-rep
 ```{r quarto}
 #| include: false
 #| eval: false
-rstudioapi::getSourceEditorContext() |>  
+rstudioapi::getSourceEditorContext()$path |>  
   quarto::quarto_render(output_format = "all")
 
 # CLI > quarto render reprex-r.qmd --to gfm,revealjs
