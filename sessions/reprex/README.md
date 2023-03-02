@@ -4,7 +4,7 @@ Jake Riley - 2/4/2022
 
 ## Agenda
 
--   [slides](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/reprex/README.html#1)
+-   [slides](https://rjake.github.io/analytics-deep-dive/sessions/reprex/README.html#1)
     \|
     [code](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/reprex/README.md)
 

@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 ```
 
 
-See [here](https://www.github.com/pages/rjake/analytics-deep-dive/sessions/r-functions/slides.html#1) 
+See [here](https://rjake.github.io/analytics-deep-dive/sessions/r-functions/slides.html#1) 
 for slides and [here](https://www.github.com/rjake/analytics-deep-dive/blob/main/sessions/r-functions/index.Rmd) for the raw code
 
 ```{r workspace}
