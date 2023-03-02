@@ -10,4 +10,5 @@ Use the [website](https://rjake.github.io/analytics-deep-dive/) option ☝️ to
 [purrr](sessions/purrr) | [slides](sessions/purrr/README.html) | iteration & `map()` functions in R
 [regex](sessions/regex) | [slides](sessions/regex/README.html) | regular expressions / text search in R & SQL
 [reprex](sessions/reprex) | [slides](sessions/reprex/README.html) | creating reproducible examples in R & SQL
+[reprex-r](sessions/reprex-r) | [slides](sessions/reprex-r/index.html) | creating reproducible examples with focus on R
 [SQL efficiency](sessions/sql-efficiency) | [slides](sessions/sql-efficiency/README.html) | optimizing SQL code
