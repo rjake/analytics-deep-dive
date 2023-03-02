@@ -1,0 +1,87 @@
+/*-- scss:rules --*/
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal {
+  text-transform: initial;
+}
+
+.thin_chunk {
+  width: 400px;
+}
+
+.slide {
+    overflow-y: auto !important;
+}
+
+:root {
+    --r-main-font-size: 30px;
+}
+
+.reveal code {
+  background-color: #045;
+  font-family: Fira Code;
+  font-size: 0.8em;
+  padding: 0px 6px 4px 6px;
+}
+
+code span.co {
+  color: #888;
+}
+
+.reveal div.sourceCode {
+  border: 1px solid #045;
+}
+
+.reveal div.sourceCode pre code.has-line-highlights > span:not(.highlight-line) {
+  opacity: 0.25;
+}
+
+.reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  font-family: Lato, sans-serif;
+  text-transform: none;
+}
+
+.reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  padding-bottom: 20px;
+
+}
+
+.reveal .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  padding-bottom: 0px;
+}
+
+.reveal pre.sourceCode code {
+  background-color: #003542;
+}
+
+.reveal.smaller .slides section, .reveal .slides section.smaller, .reveal .slides section .callout {
+  font-size: 80%;
+}
+
+.reveal .slide aside, .reveal .slide div.aside {
+  color: #93a1a16e;
+  font-style: italic;
+}
+
+
+/* Mermaid */
+.arrowheadPath {
+  fill:red !important;
+}
+
+/*
+.smaller{
+  font-size: 0.85em;
+}
+$presentation-heading-font: "Palatino Linotype", "Book Antiqua", Palatino, FreeSerif, serif !default;
+$presentation-heading-text-transform:	default;
+
+
+
+-- highlighting...
+add this to not hidden:
+  background-color: #003542;
+
+add this to the pre source code
+  background-color: lightblue;
+
+*/
+
