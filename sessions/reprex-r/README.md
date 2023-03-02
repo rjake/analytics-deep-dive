@@ -24,7 +24,7 @@ We will use these libraries
 
 ``` r
 library(tidyverse)
-library(rocqi) # internal to CHOP
+library(rocqi) # internal to CHOP, see https://github.research.chop.edu/pages/CQI/chopran/
 ```
 
 # Reproducible Examples
@@ -129,12 +129,12 @@ tibble(
     # A tibble: 6 × 3
       date_requested      surgery_date date_dist
       <dttm>              <date>       <drtn>   
-    1 2023-03-02 13:33:41 2023-03-09    7 days  
-    2 2023-03-02 13:34:41 2023-03-16   14 days  
-    3 2023-03-02 13:35:41 2023-03-23   21 days  
-    4 2023-03-02 13:36:41 2023-03-30   28 days  
-    5 2023-03-02 13:37:41 2023-04-06   35 days  
-    6 2023-03-02 13:38:41 2023-04-13   42 days  
+    1 2023-03-02 13:39:57 2023-03-09    7 days  
+    2 2023-03-02 13:40:57 2023-03-16   14 days  
+    3 2023-03-02 13:41:57 2023-03-23   21 days  
+    4 2023-03-02 13:42:57 2023-03-30   28 days  
+    5 2023-03-02 13:43:57 2023-04-06   35 days  
+    6 2023-03-02 13:44:57 2023-04-13   42 days  
 
 I like starting with a `tibble()` instead of `data.frame()` since you
 can use columns made at the time
@@ -284,12 +284,12 @@ tibble(
     # A tibble: 6 × 2
         age los_days
       <dbl>    <dbl>
-    1  7.01    3.97 
-    2 15.4     2.84 
-    3 11.5     0.193
-    4 14.8     1.38 
-    5 13.6     0.449
-    6 14.7     7.46 
+    1  9.52    3.98 
+    2  4.49    5.65 
+    3 16.4     1.47 
+    4  8.70    1.02 
+    5  7.59    0.881
+    6  8.62    0.558
 
 ## Use `set.seed()` for reproducible randomness
 
@@ -300,13 +300,13 @@ each time
 rnorm(5)
 ```
 
-    [1] -0.4608143 -0.8709348  0.2800714  0.1378880 -1.0150381
+    [1]  0.5976468  0.3304230 -1.6852587  1.2138422  0.6706068
 
 ``` r
 rnorm(5)
 ```
 
-    [1] -0.1068143 -0.1350810 -0.5646634 -0.4983243 -0.4666068
+    [1]  1.5039382  0.4480647  0.3915673  1.4052700 -0.3004578
 
 <br><br> Using `set.seed()` will make sure that the random number
 generator starts at the same point each time. Note: it needs to be right
@@ -550,45 +550,59 @@ tibble(
 
 ## Others
 
-[`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) -
-all 3 good for plotting, mix of categorical & numeric
+<div class="columns">
+
+<div class="column">
+
+[ggplot2](https://ggplot2.tidyverse.org/reference/index.html#section-data)
 
 ``` r
 mpg
 diamonds
 msleep
-map_data("state") #see vignette: https://ggplot2.tidyverse.org/reference/map_data.html
+map_data("state")
 ```
 
-[`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
+[tidyr](https://tidyr.tidyverse.org/reference/index.html#data)
 
 ``` r
 us_rent_income # pivoting
 population # longitudinal
 ```
 
-[`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
+[dplyr](https://dplyr.tidyverse.org/reference/index.html#section-data)
 
 ``` r
 storms # longitudinal
-starwars # lists, missingness, comma separated values
+starwars # lists, NA values, comma separated
 ```
 
-[`sf`](https://r-spatial.github.io/sf/articles/sf3.html)
+</div>
+
+<div class="column">
+
+[sf](https://r-spatial.github.io/sf/articles/sf3.html)
 
 ``` r
-system.file("shape/nc.shp", package="sf") |> # comes with install
+# some files comes with install
+system.file("shape/nc.shp", package="sf") |>
   st_read()
 ```
 
-[`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
+[rocqi](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
 
 ``` r
 ed_fractures
 surgeries
 ```
 
-and this app
+</div>
+
+</div>
+
+<br>
+
+Also this app
 
 [https://rjake.shinyapps.io/Find-Good-Data](https://rjake.shinyapps.io/Find-Good-Data/)
 

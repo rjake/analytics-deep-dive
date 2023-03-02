@@ -52,7 +52,7 @@ We will use these libraries
 
 ```{r libraries}
 library(tidyverse)
-library(rocqi) # internal to CHOP
+library(rocqi) # internal to CHOP, see https://github.research.chop.edu/pages/CQI/chopran/
 ```
 
 # Reproducible Examples
@@ -461,7 +461,7 @@ quakes # mapping
 ```
 
 
-## How is this helpful? {.smaller}
+## How is this helpful?
 
 :::: {.columns}
 ::: {.column}
@@ -504,43 +504,52 @@ tibble(
 
 ## Others
 
-[`ggplot2`](https://ggplot2.tidyverse.org/reference/index.html#section-data) - all 3 good for plotting, mix of categorical & numeric
+:::: {.columns}
+::: {.column}
+[ggplot2](https://ggplot2.tidyverse.org/reference/index.html#section-data) 
 ```{r}
 mpg
 diamonds
 msleep
-map_data("state") #see vignette: https://ggplot2.tidyverse.org/reference/map_data.html
+map_data("state")
 ```
 
-[`tidyr`](https://tidyr.tidyverse.org/reference/index.html#data)
+[tidyr](https://tidyr.tidyverse.org/reference/index.html#data)
 ```{r}
 us_rent_income # pivoting
 population # longitudinal
 ```
 
-[`dplyr`](https://dplyr.tidyverse.org/reference/index.html#section-data)
+[dplyr](https://dplyr.tidyverse.org/reference/index.html#section-data)
 ```{r}
 storms # longitudinal
-starwars # lists, missingness, comma separated values
+starwars # lists, NA values, comma separated
 ```
+:::
 
-[`sf`](https://r-spatial.github.io/sf/articles/sf3.html)
+::: {.column}
+[sf](https://r-spatial.github.io/sf/articles/sf3.html)
 ```{r}
-system.file("shape/nc.shp", package="sf") |> # comes with install
+# some files comes with install
+system.file("shape/nc.shp", package="sf") |>
   st_read()
 ```
 
-[`rocqi`](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
+[rocqi](https://github.research.chop.edu/pages/analytics/rocqi/reference/index.html#section-data-sets)
 
 ```{r}
 ed_fractures
 surgeries
 ```
 
-and this app
+:::
+::::
+
+<br>
+
+Also this app
 
 [https://rjake.shinyapps.io/Find-Good-Data](https://rjake.shinyapps.io/Find-Good-Data/)
-
 
 ## Takeaways
 
